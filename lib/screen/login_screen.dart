@@ -13,7 +13,7 @@ class _loginScreenState extends State<loginScreen> {
   String _email = '';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( 
       body:Column(
         mainAxisAlignment: MainAxisAlignment.center,       
         children: <Widget>[
