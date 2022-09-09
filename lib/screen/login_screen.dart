@@ -1,9 +1,11 @@
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/constans.dart';
+import 'package:healthcare/models/token.dart';
+import 'package:healthcare/screen/home_screen.dart';
 import 'package:http/http.dart'as http;
 
 class loginScreen extends StatefulWidget {
@@ -22,6 +24,7 @@ class _loginScreenState extends State<loginScreen> {
   bool _showPasswordError=false;
   bool _rememberMe = true;
   bool _passwordshow=false;
+  bool _showLoader = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold( 
@@ -40,6 +43,7 @@ class _loginScreenState extends State<loginScreen> {
             ],
             ),
              ),        
+             _showLoader ? LoaderComponent(text: "Loading ",):Container(),
         ],
       )
       
@@ -156,6 +160,10 @@ Widget _showpassword() {
   {
     return;
   }
+
+  setState(() {
+    _showLoader=true;
+  });
   Map<String , dynamic>request={
     "Username":_email,
     "Password":_password,
@@ -168,8 +176,29 @@ Widget _showpassword() {
         'content-type' : 'application/json',
         'accept' : 'application/json',
   },
-   body:jsonEncode(request));
-   print(response.body);
+   body:jsonEncode(request)
+   );
+
+   setState(() {
+    _showLoader=false;
+  });
+   if(response.statusCode >= 400)
+   {
+    setState(() {
+      _showPasswordError=true;
+      _passworderror="email or password incoorect";
+    });
+    return;
+   }
+  var body =response.body;
+  var decodejson = jsonDecode(body);
+  var token=Token.fromJson(decodejson);   
+ Navigator.pushReplacement(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(token: token,)
+      )
+    );
 }
 
   bool _validatesfiels() {

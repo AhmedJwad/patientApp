@@ -17,10 +17,8 @@ class Token {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['token'] = this.token;
-    data['expiration'] = this.expiration;
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
-    }
+    data['expiration'] = this.expiration;   
+    data['user'] = this.user.toJson();   
     return data;
   }
 }
