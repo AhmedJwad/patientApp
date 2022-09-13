@@ -1,6 +1,5 @@
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/models/Diagnosic.dart';
@@ -31,11 +30,14 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
     return Scaffold(
        appBar: AppBar(title:Text ('diagnosics')),
        body: Center(
-        child:_showLoader ? LoaderComponent(text: ('Loading...'),) :Text('diagnosics'),
-        
+        child:_showLoader ? LoaderComponent(text: ('Loading...'),) :_getcontent(),        
        ),
+        floatingActionButton: FloatingActionButton(
+      onPressed: () {} ,   
+      child: Icon(Icons.add),           
+         ),
     );
-    
+   
   }
   
   void _getdiagnosics() async{
@@ -67,4 +69,54 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
 
 
   }
+  
+  Widget _getcontent() {
+    return _diagnosic.length==0 ? _nocontent():_getlistView();
+    
+  }
+  
+  _nocontent() {
+    return Center(
+     child:      
+     Container(
+      margin: EdgeInsets.all(20),
+       child: Text('No content', 
+       style: TextStyle(
+        fontSize: 16 , fontWeight:FontWeight.bold,
+        ),
+       ),
+     )
+      );
+  }
+  
+ Widget _getlistView() {
+  return ListView(
+    children: _diagnosic.map((e){
+         return Card(
+           child: InkWell(
+            onTap: () {},    
+            child: Container(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.all(5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(e.description, style: TextStyle(fontSize: 16, ),
+           ),
+           Icon(Icons.arrow_forward_ios),
+                  ],
+                ),
+                SizedBox(height: 20,),
+              ],
+            ),
+           ),
+           
+    ),
+         );
+    }).toList(),
+  );
+ }
 }
