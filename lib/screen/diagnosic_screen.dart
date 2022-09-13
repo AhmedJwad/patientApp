@@ -1,12 +1,13 @@
 
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:healthcare/components/loader_component.dart';
+import 'package:healthcare/helpers/api_helper.dart';
 import 'package:healthcare/models/Diagnosic.dart';
+import 'package:healthcare/models/response.dart';
 import 'package:healthcare/models/token.dart';
-import 'package:healthcare/helpers/constans.dart';
-import 'package:http/http.dart'as http;
 import 'package:healthcare/screen/diagnosic_screen2.dart';
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+
 class DiagnosicScreen extends StatefulWidget {
   final Token token ;
 
@@ -55,30 +56,25 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
     setState(() {
       _showLoader=true;
     });
-    var url=Uri.parse('${constans.apiUrl}/api/diagonisics');
-    var response=await http.get(
-    url, 
-        headers: {
-        'content-type' : 'application/json',
-        'accept' : 'application/json',
-        'authorization':'bearer ${widget.token.token}' ,
-          } , 
-   );  
+    Response response=await Apihelper.Getdiagnosics(widget.token.token);
    setState(() {
      _showLoader=false;
-   });
+   }); 
 
-   var body=response.body;
-   var decodedjson=jsonDecode(body);
-   if(decodedjson != null)
+   if(!response.isSuccess)
    {
-     for (var item in decodedjson) {
-       _diagnosic.add(diagnosic.fromJson(item));
-     }
+    await showAlertDialog(
+      context: context,
+      title: 'Error',
+      message: response.message,
+      actions: <AlertDialogAction>[
+           AlertDialogAction(key: null, label: 'Accept'),
+      ]
+      );
    }
-   print(_diagnosic);
-
-
+   setState(() {
+     _diagnosic=response.result;
+   });
   }
   
   Widget _getcontent() {
@@ -125,7 +121,7 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(e.description, style: TextStyle(fontSize: 16, ),
+                    Text(e.description, style: TextStyle(fontSize: 18, ),
            ),
            Icon(Icons.arrow_forward_ios),
                   ],
