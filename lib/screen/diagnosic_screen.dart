@@ -6,6 +6,7 @@ import 'package:healthcare/models/Diagnosic.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/helpers/constans.dart';
 import 'package:http/http.dart'as http;
+import 'package:healthcare/screen/diagnosic_screen2.dart';
 class DiagnosicScreen extends StatefulWidget {
   final Token token ;
 
@@ -33,7 +34,17 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
         child:_showLoader ? LoaderComponent(text: ('Loading...'),) :_getcontent(),        
        ),
         floatingActionButton: FloatingActionButton(
-      onPressed: () {} ,   
+      onPressed: () {
+       Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context)=> diagnosicscreen(
+            token: widget.token, 
+            diagnosic1: diagnosic (description: '' , id: 0)   ,        
+          ),
+          ),   
+       );
+      } ,   
       child: Icon(Icons.add),           
          ),
     );
@@ -94,7 +105,17 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
     children: _diagnosic.map((e){
          return Card(
            child: InkWell(
-            onTap: () {},    
+            onTap: () {
+                 Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                    builder: (context)=> diagnosicscreen(
+                    token: widget.token, 
+                    diagnosic1: e,        
+          ),
+          ),   
+       );
+            },    
             child: Container(
             margin: EdgeInsets.all(10),
             padding: EdgeInsets.all(5),
