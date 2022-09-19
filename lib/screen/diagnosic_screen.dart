@@ -11,6 +11,7 @@ import 'package:adaptive_dialog/adaptive_dialog.dart';
 class DiagnosicScreen extends StatefulWidget {
   final Token token ;
 
+
   DiagnosicScreen({required this.token});
 
   @override

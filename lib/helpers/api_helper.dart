@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
-
 import 'package:healthcare/models/Diagnosic.dart';
 import 'package:healthcare/models/response.dart';
 import 'package:healthcare/helpers/constans.dart';
