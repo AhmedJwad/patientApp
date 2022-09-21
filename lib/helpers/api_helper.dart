@@ -46,7 +46,7 @@ class Apihelper {
     var body=response.body;
    if(response.statusCode >= 400)
    {
-    return Response(isSuccess: false, result:body);
+    return Response(isSuccess: false, message: response.body);
    }
   
      return Response(isSuccess: true);
@@ -66,7 +66,7 @@ class Apihelper {
     var body=response.body;
    if(response.statusCode >= 400)
    {
-    return Response(isSuccess: false, result:body);
+    return Response(isSuccess: false, message: response.body);
    }
   
      return Response(isSuccess: true);
@@ -86,7 +86,7 @@ class Apihelper {
     var body=response.body;
    if(response.statusCode >= 400)
    {
-    return Response(isSuccess: false, result:body);
+    return Response(isSuccess: false,message: response.body);
    }
   
      return Response(isSuccess: true);

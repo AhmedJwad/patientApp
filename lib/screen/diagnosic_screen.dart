@@ -21,6 +21,8 @@ class DiagnosicScreen extends StatefulWidget {
 class _diagnosicScreen extends State<DiagnosicScreen> {
   List<diagnosic> _diagnosic= [];
    bool _showLoader = false;
+   bool _isFilter=false;
+   String _search='';  
   @override
   void initState() {
     // TODO: implement initState
@@ -31,29 +33,25 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(title:Text ('diagnosics')),
+       appBar: AppBar(title:Text ('diagnosics') ,
+       actions: <Widget>
+       [
+        _isFilter ? IconButton(onPressed: _removeFilter, icon: Icon(Icons.filter)):IconButton(onPressed:  _showFilter, icon: Icon(Icons.filter_alt)),
+       ],    
+       ),
+       
        body: Center(
         child:_showLoader ? LoaderComponent(text: ('Loading...'),) :_getcontent(),        
        ),
         floatingActionButton: FloatingActionButton(
-      onPressed: () {
-       Navigator.push(
-        context, 
-        MaterialPageRoute(
-          builder: (context)=> diagnosicscreen(
-            token: widget.token, 
-            diagnosic1: diagnosic (description: '' , id: 0)   ,        
-          ),
-          ),   
-       );
-      } ,   
-      child: Icon(Icons.add),           
+      onPressed: () => _goAdd(),      
+      child: Icon(Icons.add),         
          ),
     );
    
   }
   
-  void _getdiagnosics() async{
+  Future<Null> _getdiagnosics() async{
     setState(() {
       _showLoader=true;
     });
@@ -88,7 +86,8 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
      child:      
      Container(
       margin: EdgeInsets.all(20),
-       child: Text('No content', 
+       child: Text(
+          _isFilter? 'There are no diagnosic  with that search criteria.': 'There are no registered diagnosic.',         
        style: TextStyle(
         fontSize: 16 , fontWeight:FontWeight.bold,
         ),
@@ -98,43 +97,138 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
   }
   
  Widget _getlistView() {
-  return ListView(
-    children: _diagnosic.map((e){
-         return Card(
-           child: InkWell(
-            onTap: () {
-                 Navigator.push(
+  return RefreshIndicator(    
+   onRefresh: _getdiagnosics,
+    child: ListView(
+      children: _diagnosic.map((e){
+           return Card(
+             child: InkWell(
+              onTap: ()=>_goEdit(e) ,
+              child: Container(
+              margin: EdgeInsets.all(10),
+              padding: EdgeInsets.all(5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(e.description, style: TextStyle(fontSize: 18, ),
+             ),
+             Icon(Icons.arrow_forward_ios),
+                    ],
+                  ),
+                  SizedBox(height: 20,),
+                ],
+              ),
+             ),
+             
+      ),
+           );
+      }).toList(),
+    ),
+  );
+ }
+
+  void _showFilter() {
+    showDialog(
+      context: context,
+       builder: (context){
+       return AlertDialog(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+       title:Text('Filter diagnosics'),
+       content: Column(
+       mainAxisSize: MainAxisSize.min,
+       children: <Widget>[
+        Text('Write the first letters of the diagnosics'),
+        SizedBox(height: 10,),
+        TextField(
+          decoration: InputDecoration(
+          hintText: 'Search criteria...',
+          labelText: 'Search',
+          suffixIcon: Icon(Icons.search),
+          ),
+          onChanged: (value) => {
+           _search=value,
+          },
+        ),
+       ],
+       ),
+       actions: <Widget>[
+        TextButton(onPressed:()=> Navigator.of(context).pop(),
+        child: Text('Cacel'),
+        ),
+        TextButton(onPressed:()=> _filter(),
+        child: Text('filter'),
+        )
+       ],
+       
+       );
+
+        }
+      );
+  }
+
+  void _removeFilter() {
+    setState(() {
+      _isFilter=false;
+    });
+    _getdiagnosics();
+  }
+  
+ void _filter() {
+  if(_search.isEmpty)
+  {
+    return;
+  }
+ List<diagnosic>filterList=[];
+ for (var diagnosic in _diagnosic) {
+   if(diagnosic.description.toLowerCase().contains(_search.toLowerCase()))
+   {
+    filterList.add(diagnosic);
+   }
+ }  
+ setState(() {
+    _diagnosic=filterList;
+    _isFilter=true;
+  });
+  Navigator.of(context).pop();
+ }
+ 
+ void _goAdd() async{
+   {
+      String? result=await Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (context)=> diagnosicscreen(
+            token: widget.token, 
+            diagnosic1: diagnosic (description: '' , id: 0)   ,        
+          ),
+          ),   
+       );
+       if(result =='yes')
+       {
+        _getdiagnosics();
+       }
+      } 
+  }
+  
+ void _goEdit(diagnosic diagnosic) async{
+  {
+          String? result=await  Navigator.push(
                     context, 
                     MaterialPageRoute(
                     builder: (context)=> diagnosicscreen(
                     token: widget.token, 
-                    diagnosic1: e,        
+                    diagnosic1: diagnosic,        
           ),
           ),   
        );
-            },    
-            child: Container(
-            margin: EdgeInsets.all(10),
-            padding: EdgeInsets.all(5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(e.description, style: TextStyle(fontSize: 18, ),
-           ),
-           Icon(Icons.arrow_forward_ios),
-                  ],
-                ),
-                SizedBox(height: 20,),
-              ],
-            ),
-           ),
            
-    ),
-         );
-    }).toList(),
-  );
+             if(result =='yes')
+       {
+        _getdiagnosics();
+       }
+  };
+
  }
 }
