@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:healthcare/models/token.dart';
+import 'package:healthcare/screen/Cities_Screen.dart';
+import 'package:healthcare/screen/Gendre_Screen.dart';
+import 'package:healthcare/screen/Gendres_Screen.dart';
+import 'package:healthcare/screen/bloodtype_Screen.dart';
 import 'package:healthcare/screen/diagnosic_screen.dart';
 import 'package:healthcare/screen/login_screen.dart';
 
@@ -64,7 +68,13 @@ Widget _getBody() {
      ListTile(
         leading: Icon(Icons.bloodtype),
         title: const Text('Types of Blood'),
-        onTap: () {          
+        onTap: () { 
+            Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) => BloodTypeScreen(token: widget.token,)
+      )   
+            );               
         },
         ),
         ListTile(
@@ -88,13 +98,25 @@ Widget _getBody() {
          ListTile(
         leading: Icon(Icons.location_city),
         title: const Text('Cities'),
-        onTap: () {          
+        onTap: () {  
+           Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) =>Citiesscreen(token: widget.token,)
+      )
+    );              
         },
         ),
         ListTile(
         leading: Icon(Icons.seven_k),
         title: const Text('Gendres'),
-        onTap: () {          
+        onTap: () {    
+           Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) =>GendresScreen(token: widget.token,)
+      )
+    );                    
         },
         ),
         
