@@ -3,6 +3,7 @@ import 'package:healthcare/models/token.dart';
 import 'package:healthcare/screen/Cities_Screen.dart';
 import 'package:healthcare/screen/Gendre_Screen.dart';
 import 'package:healthcare/screen/Gendres_Screen.dart';
+import 'package:healthcare/screen/Nationalities_Screen.dart';
 import 'package:healthcare/screen/bloodtype_Screen.dart';
 import 'package:healthcare/screen/diagnosic_screen.dart';
 import 'package:healthcare/screen/login_screen.dart';
@@ -92,7 +93,13 @@ Widget _getBody() {
         ListTile(
         leading: Icon(Icons.language),
         title: const Text('Nationalities'),
-        onTap: () {          
+        onTap: () {   
+            Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) => NationalitiesScreen(token: widget.token,)
+                          )
+                        );             
         },
         ),
          ListTile(
