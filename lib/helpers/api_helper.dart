@@ -6,8 +6,35 @@ import 'package:healthcare/models/bloodtypes.dart';
 import 'package:healthcare/models/gendre.dart';
 import 'package:healthcare/models/response.dart';
 import 'package:healthcare/helpers/constans.dart';
+import 'package:healthcare/models/user.dart';
 import 'package:http/http.dart'as http;
 class Apihelper {
+  static Future<Response> GetUsers(String token)async
+  {
+    var url=Uri.parse('${constans.apiUrl}/api/Users');
+    var response=await http.get(
+    url, 
+        headers: {
+        'content-type' : 'application/json',
+        'accept' : 'application/json',
+        'authorization':'bearer ${token}' ,
+          } , 
+   );    
+    var body=response.body;
+   if(response.statusCode >= 400)
+   {
+    return Response(isSuccess: false, result:body);
+   }
+  List<User> list=[] ;  
+   var decodedjson=jsonDecode(body);
+   if(decodedjson != null)
+   {
+     for (var item in decodedjson) {
+       list.add(User.fromJson(item));
+     }
+   }
+     return Response(isSuccess: true, result: list);
+     }  
   static Future<Response> GetNationalities(String token)async
   {
     var url=Uri.parse('${constans.apiUrl}/api/Natianalities');

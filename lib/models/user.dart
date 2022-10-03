@@ -1,3 +1,5 @@
+import 'package:healthcare/models/patient.dart';
+
 class User {
   String firstName='';
   String lastName='';
@@ -6,11 +8,13 @@ class User {
   String imageFullPath='';
   int userType=0;
   String fullName='';
+  List<Patients> patients=[];
   int patientsCount=0;  
   String id='';
   String userName='';  
   String email='';  
   String phoneNumber='';
+ 
   
 
   User(
@@ -21,11 +25,13 @@ class User {
       required  this.imageFullPath,
       required this.userType,
       required this.fullName,
+      required this.patients,      
       required this.patientsCount,
       required this.id,
       required this.userName,      
       required this.email,      
-      required this.phoneNumber});
+      required this.phoneNumber,
+      });
       
 
   User.fromJson(Map<String, dynamic> json) {
@@ -36,6 +42,12 @@ class User {
     imageFullPath = json['imageFullPath'];
     userType = json['userType'];
     fullName = json['fullName'];
+    if (json['patients'] != null) {
+      patients = [];
+      json['patients'].forEach((v) {
+        patients.add(new Patients.fromJson(v));
+      });
+    }
     patientsCount = json['patientsCount']; 
     id = json['id'];
     userName = json['userName'];    
@@ -52,6 +64,7 @@ class User {
     data['imageFullPath'] = this.imageFullPath;
     data['userType'] = this.userType;
     data['fullName'] = this.fullName;
+    data['patients'] = this.patients.map((v) => v.toJson()).toList();
     data['patientsCount'] = this.patientsCount;   
     data['id'] = this.id;
     data['userName'] = this.userName;    
