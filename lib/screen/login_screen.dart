@@ -33,7 +33,8 @@ class _loginScreenState extends State<loginScreen> {
           SingleChildScrollView(
             child:Column(
              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[                
+              children: <Widget>[   
+                 SizedBox(height: 40,),             
                    _showlogo(),
                     SizedBox(height: 20,),
                     _showemail(),
