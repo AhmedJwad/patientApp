@@ -1,9 +1,13 @@
+
+import 'dart:io';
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:camera/camera.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:healthcare/helpers/api_helper.dart';
 import 'package:healthcare/models/response.dart';
-
+import 'package:healthcare/screen/take_picture_screen.dart';
 import '../components/loader_component.dart';
 import '../models/token.dart';
 import '../models/user.dart';
@@ -20,6 +24,8 @@ final Token token;
 
 class _userScreen extends State<UserScreen> {
   bool _showLoader = false;
+  bool _photoChanged = false;
+  late XFile _image;
   String _firsName = '';
   String _firsNameError = '';
   bool _firsNameShowError = false;
@@ -341,24 +347,52 @@ void  _save() {
        }
        
         Widget _showPhoto() {
-          return  Container(
-            margin: EdgeInsets.only(top: 10),
-            child:widget.user.id.isEmpty ? Image
-            (
-              image: AssetImage('assets/noimage.png'),           
-                height: 160,
-                width: 160,
-                fit: BoxFit.cover,
-                ): ClipRRect(
-                          borderRadius: BorderRadius.circular(40),
-                          child: FadeInImage(
-                          placeholder: AssetImage('/assets/noimage.png'),
-                           image:NetworkImage(widget.user.imageFullPath),
-                           width: 160,
-                           height: 160,
-                           fit: BoxFit.cover,
-                           ),
-                      ),
+          return  InkWell(
+            onTap: () =>_Takepicture(),
+            child: Stack(
+              children:<Widget>[
+                 Container(
+                margin: EdgeInsets.only(top: 10),
+                child:widget.user.id.isEmpty && !_photoChanged ? Image
+                      (
+                        image: AssetImage('assets/noimage.png'),           
+                          height: 160,
+                          width: 160,
+                          fit: BoxFit.cover,
+                          ): ClipRRect(
+                              borderRadius: BorderRadius.circular(40),
+                              child:_photoChanged ? 
+                              Image.file(
+                               File(_image.path),
+                               height: 160,
+                               width: 160,
+                               fit: BoxFit.cover,
+                              )
+                              :FadeInImage(
+                              placeholder: AssetImage('/assets/noimage.png'),
+                               image:NetworkImage(widget.user.imageFullPath),
+                               width: 160,
+                               height: 160,
+                               fit: BoxFit.cover,
+                               ),
+                          ),
+              ),
+              Positioned(
+                bottom: 0,
+                left: 100,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    color: Colors.green[50],
+                    height: 60,
+                    width: 60,
+                    child: Icon(Icons.photo_camera, size: 40, color: Colors.blue,),
+                  ),
+                ),
+                ),
+                
+              ]
+            ),
           );
 
         }
@@ -454,4 +488,22 @@ void  _save() {
                       ),
     );
            }
+           
+            void  _Takepicture() async{
+              WidgetsFlutterBinding.ensureInitialized();
+              final camera= await availableCameras();
+              final firstcamera=camera.first;
+            Response? response= await  Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TakePictureScreen(camera:firstcamera,),
+              ),
+              );
+              if(response !=null)
+              {
+                setState(() {
+                  _photoChanged=true;
+                  _image=response.result;
+                });
+              }
+            }
 }
