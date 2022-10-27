@@ -5,6 +5,7 @@ import 'package:healthcare/helpers/api_helper.dart';
 import 'package:healthcare/models/response.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/models/user.dart';
+import 'package:healthcare/screen/user_info_screen.dart';
 import 'package:healthcare/screen/user_screen.dart';
 
 class UsersSCeen extends StatefulWidget {
@@ -177,7 +178,7 @@ class  _usersSCeen extends State<UsersSCeen> {
         children: _users.map((e) {
           return Card(
             child: InkWell(
-              onTap: () => _goEdit(e),
+              onTap: () =>_goInfoUser(e),
               child: Container(
                 margin: EdgeInsets.all(10),
                 padding: EdgeInsets.all(5),
@@ -268,11 +269,11 @@ class  _usersSCeen extends State<UsersSCeen> {
     }
  }
  
- void _goEdit(User user) async{
+ void _goInfoUser(User user) async{
   String? result = await Navigator.push(
       context, 
       MaterialPageRoute(
-        builder: (context) => UserScreen(
+        builder: (context) => UserInfoScreen(
           token: widget.token, 
           user: user,
         )

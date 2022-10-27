@@ -1,4 +1,5 @@
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
@@ -224,6 +225,13 @@ void  _save() {
  setState(() {
       _showLoader = true;
     });
+
+    String base64image ='';
+    if(_photoChanged)
+    {
+      List<int> imageBytes=await _image.readAsBytes();
+      base64image=base64Encode(imageBytes);
+    }
     Map<String, dynamic> request = {    
       'firstname': _firsName,  
        'lastName': _lastName,
@@ -231,7 +239,8 @@ void  _save() {
        'email':     _email,
        'userName': _email,
        'address': _address,   
-       'phoneNumber': _phoneNumber,       
+       'phoneNumber': _phoneNumber,  
+       'image':base64image,    
     };
 
     Response response;
@@ -264,6 +273,12 @@ void  _save() {
       setState(() {
       _showLoader = true;
     });
+      String base64image ='';
+    if(_photoChanged)
+    {
+      List<int> imageBytes=await _image.readAsBytes();
+      base64image=base64Encode(imageBytes);
+    }
      Map<String, dynamic> request = {
       'id': widget.user.id,
       'firstname': _firsName,
@@ -272,7 +287,8 @@ void  _save() {
       'email':     _email,
       'userName': _email,
       'address': _address,   
-      'phoneNumber': _phoneNumber,    
+      'phoneNumber': _phoneNumber,   
+      'image':base64image, 
     };
 
     Response response = await Apihelper.Put(
@@ -322,7 +338,7 @@ void  _save() {
       _showLoader = true;
     });
      Response response = await Apihelper.Delete(
-      '/api/CUsers/', 
+      '/api/Users/', 
       widget.user.id, 
       widget.token.token
     );
