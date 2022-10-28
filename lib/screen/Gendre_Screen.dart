@@ -1,4 +1,5 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/api_helper.dart';
@@ -143,7 +144,24 @@ class _gendreScreen extends State<GendreScreen> {
   setState(() {
       _showLoader = true;
     });   
-
+ var connectivityResult= await Connectivity().checkConnectivity();
+  
+  if(connectivityResult == ConnectivityResult.none )
+  {
+    setState(() {
+   _showLoader=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }  
     Map<String, dynamic> request = {
       'description': _description,     
     };
@@ -177,7 +195,23 @@ class _gendreScreen extends State<GendreScreen> {
    setState(() {
       _showLoader = true;
     });
-
+     var connectivityResult= await Connectivity().checkConnectivity(); 
+  if(connectivityResult == ConnectivityResult.none )
+  {
+     setState(() {
+   _showLoader=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
       Map<String, dynamic> request = {
       'id': widget.gendre.id,
       'description': _description,     
@@ -229,8 +263,24 @@ class _gendreScreen extends State<GendreScreen> {
      setState(() {
       _showLoader = true;
     });
-
-    
+     var connectivityResult= await Connectivity().checkConnectivity();
+ 
+  if(connectivityResult == ConnectivityResult.none )
+  {
+     setState(() {
+   _showLoader=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }    
     Response response = await Apihelper.Delete(
       '/api/gendres/', 
       widget.gendre.id.toString(), 

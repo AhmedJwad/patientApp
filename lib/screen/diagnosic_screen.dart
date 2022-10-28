@@ -1,4 +1,5 @@
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/api_helper.dart';
@@ -55,6 +56,23 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
     setState(() {
       _showLoader=true;
     });
+    var connectivityResult= await Connectivity().checkConnectivity(); 
+  if(connectivityResult == ConnectivityResult.none )
+  {
+     setState(() {
+    _showLoader=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
     Response response=await Apihelper.Getdiagnosics(widget.token.token);
    setState(() {
      _showLoader=false;

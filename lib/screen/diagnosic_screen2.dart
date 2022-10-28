@@ -1,4 +1,5 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/api_helper.dart';
@@ -144,6 +145,23 @@ class  _diagnosicscreenState extends State<diagnosicscreen> {
     setState(() {
        _showLoadre = true;
     });
+    var connectivityResult= await Connectivity().checkConnectivity(); 
+  if(connectivityResult == ConnectivityResult.none )
+  {
+     setState(() {
+   _showLoadre=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
     Map<String , dynamic>request ={
      'description': _description,
     };
@@ -170,6 +188,23 @@ class  _diagnosicscreenState extends State<diagnosicscreen> {
     setState(() {
       _showLoadre=true;
     });   
+    var connectivityResult= await Connectivity().checkConnectivity(); 
+  if(connectivityResult == ConnectivityResult.none )
+  {
+     setState(() {
+    _showLoadre=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
      Map<String , dynamic>request ={
       'id':widget.diagnosic1.id,
       'description':_description,
@@ -214,7 +249,23 @@ class  _diagnosicscreenState extends State<diagnosicscreen> {
         setState(() {
           _showLoadre==true;
         });
-
+     var connectivityResult= await Connectivity().checkConnectivity(); 
+  if(connectivityResult == ConnectivityResult.none )
+  {
+     setState(() {
+    _showLoadre=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
         Response response=await Apihelper.Delete('/api/diagonisics/', widget.diagnosic1.id.toString(),  widget.token.token);
 
          setState(() {

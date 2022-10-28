@@ -4,11 +4,13 @@ import 'dart:io';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:camera/camera.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:healthcare/helpers/api_helper.dart';
 import 'package:healthcare/models/response.dart';
 import 'package:healthcare/screen/take_picture_screen.dart';
+import 'package:image_picker/image_picker.dart';
 import '../components/loader_component.dart';
 import '../models/token.dart';
 import '../models/user.dart';
@@ -232,6 +234,24 @@ void  _save() {
       List<int> imageBytes=await _image.readAsBytes();
       base64image=base64Encode(imageBytes);
     }
+     var connectivityResult= await Connectivity().checkConnectivity();
+  
+  if(connectivityResult == ConnectivityResult.none )
+  {
+    setState(() {
+  _showLoader=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
     Map<String, dynamic> request = {    
       'firstname': _firsName,  
        'lastName': _lastName,
@@ -279,6 +299,24 @@ void  _save() {
       List<int> imageBytes=await _image.readAsBytes();
       base64image=base64Encode(imageBytes);
     }
+     var connectivityResult= await Connectivity().checkConnectivity();
+ 
+  if(connectivityResult == ConnectivityResult.none )
+  {
+     setState(() {
+   _showLoader=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
      Map<String, dynamic> request = {
       'id': widget.user.id,
       'firstname': _firsName,
@@ -337,6 +375,23 @@ void  _save() {
          setState(() {
       _showLoader = true;
     });
+     var connectivityResult= await Connectivity().checkConnectivity();  
+  if(connectivityResult == ConnectivityResult.none )
+  {
+    setState(() {
+  _showLoader=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
      Response response = await Apihelper.Delete(
       '/api/Users/', 
       widget.user.id, 
@@ -363,39 +418,39 @@ void  _save() {
        }
        
         Widget _showPhoto() {
-          return  InkWell(
-            onTap: () =>_Takepicture(),
-            child: Stack(
-              children:<Widget>[
-                 Container(
-                margin: EdgeInsets.only(top: 10),
-                child:widget.user.id.isEmpty && !_photoChanged ? Image
-                      (
-                        image: AssetImage('assets/noimage.png'),           
-                          height: 160,
-                          width: 160,
-                          fit: BoxFit.cover,
-                          ): ClipRRect(
-                              borderRadius: BorderRadius.circular(40),
-                              child:_photoChanged ? 
-                              Image.file(
-                               File(_image.path),
-                               height: 160,
-                               width: 160,
-                               fit: BoxFit.cover,
-                              )
-                              :FadeInImage(
-                              placeholder: AssetImage('/assets/noimage.png'),
-                               image:NetworkImage(widget.user.imageFullPath),
-                               width: 160,
-                               height: 160,
-                               fit: BoxFit.cover,
-                               ),
-                          ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 100,
+          return  Stack(
+            children:<Widget>[
+               Container(
+              margin: EdgeInsets.only(top: 10),
+              child:widget.user.id.isEmpty && !_photoChanged ? Image
+                    (
+                      image: AssetImage('assets/noimage.png'),           
+                        height: 160,
+                        width: 160,
+                        fit: BoxFit.cover,
+                        ): ClipRRect(
+                            borderRadius: BorderRadius.circular(40),
+                            child:_photoChanged ? 
+                            Image.file(
+                             File(_image.path),
+                             height: 160,
+                             width: 160,
+                             fit: BoxFit.cover,
+                            )
+                            :FadeInImage(
+                            placeholder: AssetImage('/assets/noimage.png'),
+                             image:NetworkImage(widget.user.imageFullPath),
+                             width: 160,
+                             height: 160,
+                             fit: BoxFit.cover,
+                             ),
+                        ),
+            ),
+             Positioned(
+              bottom: 0,
+              left: 100,
+              child: InkWell(
+                onTap: ()=>_Takepicture,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
                   child: Container(
@@ -405,10 +460,27 @@ void  _save() {
                     child: Icon(Icons.photo_camera, size: 40, color: Colors.blue,),
                   ),
                 ),
+              ),
+              ),
+              
+            Positioned(
+              bottom: 0,
+              left: 0,
+              child:InkWell(
+                onTap: ()=> _selectPicture(),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    color: Colors.green[50],
+                    height: 60,
+                    width: 60,
+                    child: Icon(Icons.image, size: 40, color: Colors.blue,),
+                  ),
                 ),
-                
-              ]
-            ),
+              ),
+              ),
+              
+            ]
           );
 
         }
@@ -522,4 +594,16 @@ void  _save() {
                 });
               }
             }
+            
+             void _selectPicture() async{
+              final ImagePicker _picker= ImagePicker();
+              final XFile? image= await _picker.pickImage(source: ImageSource.gallery);
+              if(image !=null)
+              {
+                setState(() {
+                  _photoChanged=true;
+                _image=image;                  
+                });                
+              }
+             }
 }

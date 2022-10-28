@@ -162,7 +162,7 @@ Widget  _showAddPatientButtons() {
       style: ButtonStyle(
        backgroundColor: MaterialStateProperty.resolveWith<Color>(
           (Set<MaterialState>states){
-            return Color(0xFF120E43);
+            return Color(0xFFE03B8B);
           }
         )
         ),

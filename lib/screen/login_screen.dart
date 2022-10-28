@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:healthcare/components/loader_component.dart';
@@ -7,6 +8,7 @@ import 'package:healthcare/helpers/constans.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/screen/home_screen.dart';
 import 'package:http/http.dart'as http;
+import 'package:connectivity/connectivity.dart';
 
 class loginScreen extends StatefulWidget {
   const loginScreen({Key? key}) : super(key: key);
@@ -165,6 +167,25 @@ Widget _showpassword() {
   setState(() {
     _showLoader=true;
   });
+
+  var connectivityResult= await Connectivity().checkConnectivity();
+  
+  if(connectivityResult == ConnectivityResult.none )
+  {
+    setState(() {
+    _showLoader=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
   Map<String , dynamic>request={
     "Username":_email,
     "Password":_password,

@@ -1,4 +1,6 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/api_helper.dart';
@@ -58,6 +60,23 @@ class  _usersSCeen extends State<UsersSCeen> {
     setState(() {
       _showLoader=true;
     });
+     var connectivityResult= await Connectivity().checkConnectivity();  
+  if(connectivityResult == ConnectivityResult.none )
+  {
+    setState(() {
+   _showLoader=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
     Response response = await Apihelper.GetUsers(widget.token.token);
 
     setState(() {
@@ -186,13 +205,19 @@ class  _usersSCeen extends State<UsersSCeen> {
                   children: [
                     ClipRRect(
                         borderRadius: BorderRadius.circular(40),
-                        child: FadeInImage(
-                        placeholder: AssetImage('/assets/noimage.png'),
-                         image:NetworkImage(e.imageFullPath),
-                         width: 80,
-                         height: 80,
-                         fit: BoxFit.cover,
+                        child: CachedNetworkImage(
+                       imageUrl: e.imageFullPath,
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                        fit: BoxFit.cover,
+                        height: 80,
+                        width: 80,
+                        placeholder: (context, url) => Image(
+                          image: AssetImage('assets/vehicles_logo.png'),
+                          fit: BoxFit.cover,
+                          height: 80,
+                          width: 80,
                          ),
+                    ),
                     ),
                   Expanded(
                      child:Container(
