@@ -167,7 +167,7 @@ Widget  _showDescription() {
     Response response = await Apihelper.Post(
       '/api/Natianalities/', 
       request, 
-      widget.token.token
+      widget.token
     );
 
     setState(() {
@@ -220,7 +220,7 @@ Widget  _showDescription() {
       '/api/Natianalities/', 
       widget.natinality.id.toString(), 
       request, 
-      widget.token.token
+      widget.token
     );
 
     setState(() {
@@ -284,7 +284,7 @@ Widget  _showDescription() {
     Response response = await Apihelper.Delete(
       '/api/Natianalities/', 
       widget.natinality.id.toString(), 
-      widget.token.token
+      widget.token
     );
 
     setState(() {

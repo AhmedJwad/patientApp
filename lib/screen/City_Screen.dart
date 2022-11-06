@@ -170,7 +170,7 @@ class  _cityScreen extends State<CityScreen> {
     Response response = await Apihelper.Post(
       '/api/Cities/', 
       request, 
-      widget.token.token,
+      widget.token,
     );
 
     setState(() {
@@ -223,7 +223,7 @@ class  _cityScreen extends State<CityScreen> {
       '/api/Cities/', 
       widget.city.id.toString(), 
       request, 
-      widget.token.token
+      widget.token
     );
 
     setState(() {
@@ -285,7 +285,7 @@ class  _cityScreen extends State<CityScreen> {
      Response response = await Apihelper.Delete(
       '/api/Cities/', 
       widget.city.id.toString(), 
-      widget.token.token
+      widget.token
     );
 
     setState(() {

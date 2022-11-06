@@ -73,7 +73,7 @@ class  _gendresScreen extends State<GendresScreen> {
       return ;
       
   }
-    Response response=await Apihelper.GetGendre(widget.token.token);
+    Response response=await Apihelper.GetGendre(widget.token);
 
     setState(() {
       _showLoader =false;

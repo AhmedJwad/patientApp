@@ -76,7 +76,7 @@ class _citiesscreen extends State<Citiesscreen> {
       return ;
       
   }
-    Response response = await Apihelper.Getcities(widget.token.token);
+    Response response = await Apihelper.Getcities(widget.token);
 
     setState(() {
       _showLoader = false;

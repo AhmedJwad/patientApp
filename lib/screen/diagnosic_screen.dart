@@ -73,7 +73,7 @@ class _diagnosicScreen extends State<DiagnosicScreen> {
       return ;
       
   }
-    Response response=await Apihelper.Getdiagnosics(widget.token.token);
+    Response response=await Apihelper.Getdiagnosics(widget.token);
    setState(() {
      _showLoader=false;
    }); 

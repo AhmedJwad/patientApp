@@ -68,7 +68,7 @@ class _bloodtypescreenstate extends State<BloodTypeScreen> {
       return ;
       
   }
-Response response=await Apihelper.Getbloodtypes(widget.token.token);
+Response response=await Apihelper.Getbloodtypes(widget.token);
   setState(() {
       _showLoader = false;
     });

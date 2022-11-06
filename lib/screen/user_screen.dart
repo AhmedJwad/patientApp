@@ -267,7 +267,7 @@ void  _save() {
     response = await Apihelper.Post(
       '/api/Users/', 
       request, 
-      widget.token.token,
+      widget.token,
     );
 
     setState(() {
@@ -333,7 +333,7 @@ void  _save() {
       '/api/users/', 
       widget.user.id, 
       request, 
-      widget.token.token
+      widget.token
     );
 
     setState(() {
@@ -395,7 +395,7 @@ void  _save() {
      Response response = await Apihelper.Delete(
       '/api/Users/', 
       widget.user.id, 
-      widget.token.token
+      widget.token
     );
 
     setState(() {

@@ -169,7 +169,7 @@ class _gendreScreen extends State<GendreScreen> {
     Response response = await Apihelper.Post(
       '/api/gendres/', 
       request, 
-     widget.token.token
+     widget.token
     );
 
     setState(() {
@@ -221,7 +221,7 @@ class _gendreScreen extends State<GendreScreen> {
       '/api/gendres/', 
       widget.gendre.id.toString(), 
       request, 
-      widget.token.token
+      widget.token
     );
 
     setState(() {
@@ -284,7 +284,7 @@ class _gendreScreen extends State<GendreScreen> {
     Response response = await Apihelper.Delete(
       '/api/gendres/', 
       widget.gendre.id.toString(), 
-      widget.token.token
+     widget.token
     );
 
     setState(() {

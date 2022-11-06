@@ -9,6 +9,7 @@ import 'package:healthcare/models/token.dart';
 import 'package:healthcare/screen/home_screen.dart';
 import 'package:http/http.dart'as http;
 import 'package:connectivity/connectivity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class loginScreen extends StatefulWidget {
   const loginScreen({Key? key}) : super(key: key);
@@ -212,7 +213,12 @@ Widget _showpassword() {
     });
     return;
    }
+
   var body =response.body;
+  if(_rememberMe)
+  {
+    _storeUser(body);
+  }
   var decodejson = jsonDecode(body);
   var token=Token.fromJson(decodejson);   
  Navigator.pushReplacement(
@@ -255,6 +261,12 @@ Widget _showpassword() {
       
     });
     return isValid;
+  }
+  
+  void _storeUser(String body)async {
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    await pref.setBool('isRemembered', true);
+    await pref.setString('userBody', body);
   }
   
  

@@ -165,7 +165,7 @@ class  _diagnosicscreenState extends State<diagnosicscreen> {
     Map<String , dynamic>request ={
      'description': _description,
     };
-    Response response=await Apihelper.Post('/api/diagonisics/', request, widget.token.token);
+    Response response=await Apihelper.Post('/api/diagonisics/', request, widget.token);
     if(!response.isSuccess)
     {
       await showAlertDialog(
@@ -209,7 +209,7 @@ class  _diagnosicscreenState extends State<diagnosicscreen> {
       'id':widget.diagnosic1.id,
       'description':_description,
      };
-     Response response=await Apihelper.Put('/api/diagonisics/', widget.diagnosic1.id.toString(), request, widget.token.token);    
+     Response response=await Apihelper.Put('/api/diagonisics/', widget.diagnosic1.id.toString(), request, widget.token);    
       setState(() {
       _showLoadre=false;
       });   
@@ -266,7 +266,7 @@ class  _diagnosicscreenState extends State<diagnosicscreen> {
       return ;
       
   }
-        Response response=await Apihelper.Delete('/api/diagonisics/', widget.diagnosic1.id.toString(),  widget.token.token);
+        Response response=await Apihelper.Delete('/api/diagonisics/', widget.diagnosic1.id.toString(),  widget.token);
 
          setState(() {
           _showLoadre==false;

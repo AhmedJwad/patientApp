@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:healthcare/models/City.dart';
 import 'package:healthcare/models/Diagnosic.dart';
 import 'package:healthcare/models/Nationality.dart';
@@ -6,18 +7,22 @@ import 'package:healthcare/models/bloodtypes.dart';
 import 'package:healthcare/models/gendre.dart';
 import 'package:healthcare/models/response.dart';
 import 'package:healthcare/helpers/constans.dart';
+import 'package:healthcare/models/token.dart';
 import 'package:healthcare/models/user.dart';
 import 'package:http/http.dart'as http;
 class Apihelper {
-  static Future<Response> GetUsers(String token)async
+  static Future<Response> GetUsers(Token token)async
   {
+     if (!_validToken(token)) {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
     var url=Uri.parse('${constans.apiUrl}/api/Users');
     var response=await http.get(
     url, 
         headers: {
         'content-type' : 'application/json',
         'accept' : 'application/json',
-        'authorization':'bearer ${token}' ,
+        'authorization':'bearer ${token.token}' ,
           } , 
    );    
     var body=response.body;
@@ -35,15 +40,18 @@ class Apihelper {
    }
      return Response(isSuccess: true, result: list);
      }  
-  static Future<Response> GetNationalities(String token)async
+  static Future<Response> GetNationalities(Token token)async
   {
+     if (!_validToken(token)) {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
     var url=Uri.parse('${constans.apiUrl}/api/Natianalities');
     var response=await http.get(
     url, 
         headers: {
         'content-type' : 'application/json',
         'accept' : 'application/json',
-        'authorization':'bearer ${token}' ,
+        'authorization':'bearer ${token.token}' ,
           } , 
    );    
     var body=response.body;
@@ -62,15 +70,18 @@ class Apihelper {
      return Response(isSuccess: true, result: list);
      }  
   
-  static Future<Response> GetGendre(String token)async
+  static Future<Response> GetGendre(Token token)async
   {
+     if (!_validToken(token)) {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
     var url=Uri.parse('${constans.apiUrl}/api/gendres');
     var response=await http.get(
     url, 
         headers: {
         'content-type' : 'application/json',
         'accept' : 'application/json',
-        'authorization':'bearer ${token}' ,
+        'authorization':'bearer ${token.token}' ,
           } , 
    );    
     var body=response.body;
@@ -88,15 +99,18 @@ class Apihelper {
    }
      return Response(isSuccess: true, result: list);
      }  
-  static Future<Response> Getcities(String token)async
+  static Future<Response> Getcities(Token token)async
   {
+     if (!_validToken(token)) {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
     var url=Uri.parse('${constans.apiUrl}/api/Cities');
     var response=await http.get(
     url, 
         headers: {
         'content-type' : 'application/json',
         'accept' : 'application/json',
-        'authorization':'bearer ${token}' ,
+        'authorization':'bearer ${token.token}' ,
           } , 
    );    
     var body=response.body;
@@ -115,15 +129,18 @@ class Apihelper {
      return Response(isSuccess: true, result: list);
      }  
 
-static Future<Response> Getbloodtypes(String token)async
+static Future<Response> Getbloodtypes(Token token)async
   {
+     if (!_validToken(token)) {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
     var url=Uri.parse('${constans.apiUrl}/api/BloodTypes');
     var response=await http.get(
     url, 
         headers: {
         'content-type' : 'application/json',
         'accept' : 'application/json',
-        'authorization':'bearer ${token}' ,
+        'authorization':'bearer ${token.token}' ,
           } , 
    );    
     var body=response.body;
@@ -143,15 +160,18 @@ static Future<Response> Getbloodtypes(String token)async
      }  
 
 
-  static Future<Response> Getdiagnosics(String token)async
+  static Future<Response> Getdiagnosics(Token token)async
   {
+     if (!_validToken(token)) {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
     var url=Uri.parse('${constans.apiUrl}/api/diagonisics');
     var response=await http.get(
     url, 
         headers: {
         'content-type' : 'application/json',
         'accept' : 'application/json',
-        'authorization':'bearer ${token}' ,
+        'authorization':'bearer ${token.token}' ,
           } , 
    );    
     var body=response.body;
@@ -170,15 +190,18 @@ static Future<Response> Getbloodtypes(String token)async
      return Response(isSuccess: true, result: list);
      }  
 
-     static Future<Response> Put(String controller , String id ,Map<String, dynamic>request,  String token)async
+     static Future<Response> Put(String controller , String id ,Map<String, dynamic>request,  Token token)async
   {
+     if (!_validToken(token)) {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
     var url=Uri.parse('${constans.apiUrl}$controller$id');
     var response=await http.put(
     url, 
         headers: {
         'content-type' : 'application/json',
         'accept' : 'application/json',
-        'authorization':'bearer ${token}' ,
+        'authorization':'bearer ${token.token}' ,
           } , 
           body: jsonEncode(request),
    );    
@@ -190,15 +213,18 @@ static Future<Response> Getbloodtypes(String token)async
   
      return Response(isSuccess: true);
    }  
-   static Future<Response> Post(String controller  ,Map<String, dynamic>request,  String token)async
+   static Future<Response> Post(String controller  ,Map<String, dynamic>request,  Token token)async
   {
+     if (!_validToken(token)) {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
     var url=Uri.parse('${constans.apiUrl}$controller');
     var response=await http.post(
     url, 
         headers: {
         'content-type' : 'application/json',
         'accept' : 'application/json',
-        'authorization':'bearer ${token}' ,
+        'authorization':'bearer ${token.token}' ,
           } , 
           body: jsonEncode(request),
    );    
@@ -210,15 +236,18 @@ static Future<Response> Getbloodtypes(String token)async
   
      return Response(isSuccess: true);
    }  
-     static Future<Response> Delete(String controller , String id ,  String token)async
+     static Future<Response> Delete(String controller , String id ,  Token token)async
   {
+     if (!_validToken(token)) {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
     var url=Uri.parse('${constans.apiUrl}$controller$id');
     var response=await http.delete(
     url, 
         headers: {
         'content-type' : 'application/json',
         'accept' : 'application/json',
-        'authorization':'bearer ${token}' ,
+        'authorization':'bearer ${token.token}' ,
           } , 
          
    );    
@@ -229,5 +258,13 @@ static Future<Response> Getbloodtypes(String token)async
    }
   
      return Response(isSuccess: true);
-   }  
+   }
+   
+     static bool _validToken(Token token) {
+      if(DateTime.parse(token.expiration).isAfter(DateTime.now()))
+      {
+        return true;
+      }
+      return false;
+     }  
 }

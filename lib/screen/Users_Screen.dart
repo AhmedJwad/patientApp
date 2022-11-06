@@ -77,7 +77,7 @@ class  _usersSCeen extends State<UsersSCeen> {
       return ;
       
   }
-    Response response = await Apihelper.GetUsers(widget.token.token);
+    Response response = await Apihelper.GetUsers(widget.token);
 
     setState(() {
       _showLoader = false;
@@ -212,7 +212,7 @@ class  _usersSCeen extends State<UsersSCeen> {
                         height: 80,
                         width: 80,
                         placeholder: (context, url) => Image(
-                          image: AssetImage('assets/vehicles_logo.png'),
+                          image: AssetImage('assets/logo.jpg'),
                           fit: BoxFit.cover,
                           height: 80,
                           width: 80,

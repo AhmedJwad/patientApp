@@ -76,7 +76,7 @@ class _nationalitiesScreen extends State<NationalitiesScreen> {
       return ;
       
   }
-     Response response = await Apihelper.GetNationalities(widget.token.token);
+     Response response = await Apihelper.GetNationalities(widget.token);
 
     setState(() {
       _showLoader = false;

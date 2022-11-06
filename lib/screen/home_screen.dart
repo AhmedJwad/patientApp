@@ -8,6 +8,7 @@ import 'package:healthcare/screen/Users_Screen.dart';
 import 'package:healthcare/screen/bloodtype_Screen.dart';
 import 'package:healthcare/screen/diagnosic_screen.dart';
 import 'package:healthcare/screen/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
  final Token token;
@@ -41,6 +42,7 @@ Widget _getBody() {
                             placeholder: AssetImage('assets/logo.jpg'),
                             image: NetworkImage(widget.token.user.imageFullPath),
                             height: 300,
+                            width: 300,
                             fit: BoxFit.cover,                           
         ),
       ),     
@@ -148,14 +150,7 @@ Widget _getBody() {
          ListTile(
         leading: Icon(Icons.login_outlined),
         title: const Text('Log out'),
-        onTap: () {  
-          Navigator.pushReplacement(
-      context, 
-      MaterialPageRoute(
-        builder: (context) => loginScreen(),
-      )
-    );        
-        },
+        onTap: () =>_logOut(),
         ),
      ],
     ),
@@ -193,17 +188,24 @@ Widget _getBody() {
          ListTile(
         leading: Icon(Icons.login_outlined),
         title: const Text('Log out'),
-        onTap: () {  
-          Navigator.pushReplacement(
-      context, 
-      MaterialPageRoute(
-        builder: (context) => loginScreen(),
-      )
-    );        
-        },
+        onTap: ()=>_logOut()
+          
         ),
      ],
     ),
   );  
+ }
+ 
+ void _logOut() async{
+   SharedPreferences pref=await SharedPreferences.getInstance();
+    await pref.setBool('isRemembered', false);
+    await pref.setString('userBody','');
+        Navigator.pushReplacement(
+                      context, 
+                      MaterialPageRoute(
+                        builder: (context) => loginScreen(),
+              )
+            );     
+        
  }
 }

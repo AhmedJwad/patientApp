@@ -168,7 +168,7 @@ class _bloodTypesScreen extends State<BloodTypesScreen> {
   Map<String , dynamic>request={
     'description':_description,    
   };
-  Response response =await Apihelper.Post('/api/BloodTypes/', request, widget.token.token);
+  Response response =await Apihelper.Post('/api/BloodTypes/', request, widget.token);
   setState(() {
       _showLoader = false;
     });
@@ -215,7 +215,7 @@ class _bloodTypesScreen extends State<BloodTypesScreen> {
   Response response =await Apihelper.Put('/api/BloodTypes/', 
       widget.bloodtypess.id.toString(), 
       request, 
-      widget.token.token);
+      widget.token);
   setState(() {
       _showLoader = false;
     });
@@ -276,7 +276,7 @@ class _bloodTypesScreen extends State<BloodTypesScreen> {
     Response response = await Apihelper.Delete(
       '/api/BloodTypes/', 
       widget.bloodtypess.id.toString(), 
-      widget.token.token,
+      widget.token,
     );
 
     setState(() {
