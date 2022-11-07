@@ -28,6 +28,7 @@ class Patients {
   Gendre gendre=Gendre(id: 0, description: '');
   bloodtypes bloodType=bloodtypes(id: 0, description: '');
 
+
   Patients(
       {required this.id,
        required this.firstName,
@@ -47,7 +48,7 @@ class Patients {
        required this.histories,
        required this.city,
        required this.natianality,
-       required this.gendre,
+       required this.gendre,      
        required this.bloodType});
 
   Patients.fromJson(Map<String, dynamic> json) {

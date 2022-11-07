@@ -1,4 +1,10 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity/connectivity.dart';
+import 'package:flutter/foundation.dart';
 import 'package:healthcare/components/loader_component.dart';
+import 'package:healthcare/helpers/api_helper.dart';
+import 'package:healthcare/models/response.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/models/user.dart';
 import 'package:flutter/material.dart';
@@ -17,23 +23,31 @@ UserInfoScreen({required this.token, required this.user});
 
 class _UserInfoScreenState extends State<UserInfoScreen> {
    bool _showLoader = false;
-   
+   late User _user;
   @override
-
+ void initState() {
+    // TODO: implement initState
+    super.initState();
+    _user=widget.user;
+    _getUser();
+  }
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.user.fullName),),
+      appBar: AppBar(title: Text(_user.fullName),),
       body: Stack(
         children: <Widget>[
           Column(
            children:<Widget> [
-               _showUserinfo(),
-               _showbuttons(),
+               _showUserinfo(),              
            ],
           ),     
           _showLoader?LoaderComponent(text: 'please wait',)  :Container(),  
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: ()=> _goAdd(),            
+      )
     );
   }
   
@@ -43,16 +57,42 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 padding: EdgeInsets.all(5),
                 child: Row(               
                   children: [
+                   Stack(
+                    children: <Widget>[
                     ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: FadeInImage(
-                        placeholder: AssetImage('/assets/noimage.png'),
-                         image:NetworkImage(widget.user.imageFullPath),
-                         width: 100,
-                         height: 100,
-                         fit: BoxFit.cover,
-                         ),
-                    ),
+                          borderRadius: BorderRadius.circular(50),
+                          child: CachedNetworkImage(
+                            imageUrl: _user.imageFullPath,
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            fit: BoxFit.cover,
+                            height: 100,
+                            width: 100,
+                            placeholder: (context, url) => Image(
+                              image: AssetImage('assets/vehicles_logo.png'),
+                              fit: BoxFit.cover,
+                              height: 100,
+                              width: 100,
+                            ),
+                          ),
+                        ),
+                       Positioned(
+                          bottom: 0,
+                          left: 60,
+                          child: InkWell(
+                            onTap: ()=>_goEdit(),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Container(
+                                color: Colors.green[50],
+                                height: 40,
+                                width: 40,
+                                child: Icon(Icons.edit, size: 30, color: Colors.blue,),
+                              ),
+                            ),
+                          ),
+                          ),
+                      ],
+                    ),                    
                   Expanded(
                      child:Container(
                       margin: EdgeInsets.symmetric(horizontal: 20),
@@ -67,7 +107,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                     children:<Widget> [
                                       Text('Email :', style: TextStyle(fontWeight: FontWeight.bold),),
                                       Text(
-                                        widget.user.email, 
+                                        _user.email, 
                                         style: TextStyle(
                                           fontSize: 15,
                                         ),
@@ -79,7 +119,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                     children: <Widget>[
                                        Text('Phone Number :', style: TextStyle(fontWeight: FontWeight.bold),),
                                       Text(
-                                        widget.user.phoneNumber, 
+                                        _user.phoneNumber, 
                                         style: TextStyle(
                                           fontSize: 15,
                                         ),
@@ -91,7 +131,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                     children: <Widget>[
                                        Text('Address :', style: TextStyle(fontWeight: FontWeight.bold),),
                                       Text(
-                                        widget.user.address, 
+                                        _user.address, 
                                         style: TextStyle(
                                           fontSize: 15,
                                         ),
@@ -103,7 +143,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                     children: <Widget>[
                                        Text('#Patients :', style: TextStyle(fontWeight: FontWeight.bold),),
                                       Text(
-                                        widget.user.patientsCount.toString(), 
+                                        _user.patientsCount.toString(), 
                                         style: TextStyle(
                                           fontSize: 15,
                                         ),
@@ -122,54 +162,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               );
   }
   
- Widget _showbuttons() {
-   return Container(    
-    margin: EdgeInsets.only(left:10, right: 10,bottom: 10, top: 10),  
-
-    child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,           
-     children: <Widget>[  
-     _showEditUserButton(),
-     SizedBox(width: 20,),
-    _showAddPatientButtons(),     
-     ],
-    ),
-  );
-  }
-  
- Widget _showEditUserButton() {
-  return Expanded
-  (
-    child: ElevatedButton(
-      child: Text("Edit User"),
-      style: ButtonStyle(
-       backgroundColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState>states){
-            return Color(0xFF120E43);
-          }
-        )
-        ),
-         onPressed:() =>_goEdit()
-      )  
-  );
- }
-  
-Widget  _showAddPatientButtons() {
-   return Expanded
-  (
-    child: ElevatedButton(
-      child: Text("Add Patient"),
-      style: ButtonStyle(
-       backgroundColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState>states){
-            return Color(0xFFE03B8B);
-          }
-        )
-        ),
-         onPressed: () {}
-      )  
-  );
-}
+ 
 
  void _goEdit() async{
     String? result = await Navigator.push(
@@ -177,7 +170,7 @@ Widget  _showAddPatientButtons() {
       MaterialPageRoute(
         builder: (context) => UserScreen(
           token: widget.token, 
-          user:widget.user ,
+          user:_user ,
         )
       )
     );
@@ -185,5 +178,48 @@ Widget  _showAddPatientButtons() {
      //TODO:pending refrence user info
     }  
     }
+    
+      Future<Null> _getUser() async{
+        setState(() {
+          _showLoader=true;
+        });
+        var connectivityResult = await Connectivity().checkConnectivity();
+                            if (connectivityResult == ConnectivityResult.none) {
+                              setState(() {
+                                _showLoader = false;
+                              });
+                              await showAlertDialog(
+                                context: context,
+                                title: 'Error', 
+                                message: 'check your internet connection',
+                                actions: <AlertDialogAction>[
+                                    AlertDialogAction(key: null, label: 'Accept'),
+                                ]
+                              );    
+                              return;
+                            }
+        Response response=await Apihelper.getUser(widget.token , _user.id);
+
+        setState(() {
+          _showLoader=false;
+        });
+         if (!response.isSuccess) {
+                await showAlertDialog(
+                  context: context,
+                  title: 'Error', 
+                  message: response.message,
+                  actions: <AlertDialogAction>[
+                      AlertDialogAction(key: null, label: 'Aceptar'),
+                  ]
+                );    
+                return;
+              }
+              setState(() {                 
+                _user=response.result;
+              });
+      }
+      
+        _goAdd() {}
+
   }    
   

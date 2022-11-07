@@ -280,12 +280,13 @@ class  _usersSCeen extends State<UsersSCeen> {
           imageFullPath: '',
           userType: 1, 
           fullName: '',
-          patients:[],
+          patients:[],         
           patientsCount: 0,
           id: '',
           userName: '',
           email: '',
-          phoneNumber: ''),
+          phoneNumber: ''
+         ),
         )
       )
     );
