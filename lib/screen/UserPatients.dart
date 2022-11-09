@@ -21,7 +21,7 @@ class UserPatients extends StatefulWidget {
 }
 
 class  _userPatientsState extends State<UserPatients> {
-  List<userPatient> _userpatients=[];
+  List<UserPatient> _userpatients=[];
    bool _showLoader = false;
    bool _isFiltered = false;
    String _search = '';
@@ -240,7 +240,7 @@ class  _userPatientsState extends State<UserPatients> {
       return;
     }
 
-    List<userPatient> filteredList = [];
+    List<UserPatient> filteredList = [];
     for (var userpatient in _userpatients) {
       if (userpatient.firstName.toLowerCase().contains(_search.toLowerCase())) {
         filteredList.add(userpatient);

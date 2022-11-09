@@ -1,11 +1,11 @@
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/foundation.dart';
 import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/api_helper.dart';
 import 'package:healthcare/models/City.dart';
 import 'package:healthcare/models/Nationality.dart';
+import 'package:healthcare/models/UserPatient.dart';
 import 'package:healthcare/models/bloodtypes.dart';
 import 'package:healthcare/models/gendre.dart';
 import 'package:healthcare/models/patient.dart';
@@ -62,12 +62,14 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           histories: [],
           historiesCount: 0,
           id:0,
-          imageFullPath: '', 
+          imageFullPath: '',
           lastName: '',
           mobilePhone: '',
           natianality: Natinality(id: 0, description: ''),
           patientPhotos: [],
           patientPhotosCount: 0,
+          userPatient:UserPatient(id: 0, firstName: '', lastName: '', address:'', phoneNumber: '', email: ''),
+                  
          )),            
       )
     );

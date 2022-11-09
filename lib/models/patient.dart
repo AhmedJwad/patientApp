@@ -29,6 +29,7 @@ class Patients {
   Natinality natianality=Natinality(id: 0, description: '');
   Gendre gendre=Gendre(id: 0, description: '');
   bloodtypes bloodType=bloodtypes(id: 0, description: '');
+  UserPatient userPatient=UserPatient(id: 0, firstName: '', lastName: '', address:'', phoneNumber: '', email: '');
   
 
   Patients(
@@ -52,7 +53,7 @@ class Patients {
        required this.natianality,
        required this.gendre,      
        required this.bloodType,
-     
+       required this.userPatient,     
       });
 
   Patients.fromJson(Map<String, dynamic> json) {
@@ -86,7 +87,7 @@ class Patients {
     natianality =Natinality.fromJson(json['natianality']);        
     gendre = Gendre.fromJson(json['gendre']) ;
     bloodType = bloodtypes.fromJson(json['bloodType']);   
-   
+    userPatient=UserPatient.fromJson(json['userPatient']);
   }
 
   Map<String, dynamic> toJson() {
@@ -110,8 +111,8 @@ class Patients {
     data['city'] = this.city.toJson();   
     data['natianality'] = this.natianality.toJson();   
     data['gendre'] = this.gendre.toJson();    
-    data['bloodType'] = this.bloodType.toJson();   
- 
+    data['bloodType'] = this.bloodType.toJson(); 
+    data['userPatient'] = this.userPatient.toJson(); 
     return data;
   }
 }

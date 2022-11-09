@@ -1,4 +1,4 @@
-class userPatient {
+class UserPatient {
   int id=0;
   String firstName='';
   String lastName='';
@@ -6,10 +6,10 @@ class userPatient {
   String phoneNumber='';
   String email='';
 
-  userPatient({required this.id,required this.firstName,required this.lastName,required this.address,
+  UserPatient({required this.id,required this.firstName,required this.lastName,required this.address,
    required this.phoneNumber,required this.email});
 
-  userPatient.fromJson(Map<String, dynamic> json) {
+  UserPatient.fromJson(Map<String, dynamic> json) {
     id = json['id'];
    firstName = json['firstName'];
    lastName = json['lastName'];

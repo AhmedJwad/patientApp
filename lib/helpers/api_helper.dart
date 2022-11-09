@@ -1,16 +1,15 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:healthcare/models/City.dart';
 import 'package:healthcare/models/Diagnosic.dart';
 import 'package:healthcare/models/Nationality.dart';
-import 'package:healthcare/models/UserPatient.dart';
 import 'package:healthcare/models/bloodtypes.dart';
 import 'package:healthcare/models/gendre.dart';
 import 'package:healthcare/models/response.dart';
 import 'package:healthcare/helpers/constans.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/models/user.dart';
+import 'package:healthcare/models/UserPatient.dart';
 import 'package:http/http.dart'as http;
 class Apihelper {
   static Future<Response> GetUsers(Token token)async
@@ -312,12 +311,12 @@ static Future<Response> Getbloodtypes(Token token)async
    {
     return Response(isSuccess: false, result:body);
    }
-  List<userPatient> list=[] ;  
+  List<UserPatient> list=[] ;  
    var decodedjson=jsonDecode(body);
    if(decodedjson != null)
    {
      for (var item in decodedjson) {
-       list.add(userPatient.fromJson(item));
+       list.add(UserPatient.fromJson(item));
      }
    }
      return Response(isSuccess: true, result: list);
