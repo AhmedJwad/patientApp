@@ -4,10 +4,16 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/api_helper.dart';
+import 'package:healthcare/models/City.dart';
+import 'package:healthcare/models/Nationality.dart';
+import 'package:healthcare/models/bloodtypes.dart';
+import 'package:healthcare/models/gendre.dart';
+import 'package:healthcare/models/patient.dart';
 import 'package:healthcare/models/response.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:healthcare/screen/Patient_Screen.dart';
 import 'package:healthcare/screen/user_screen.dart';
 
 class UserInfoScreen extends StatefulWidget {
@@ -41,7 +47,28 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: ()=> _goAdd(),            
+        onPressed: ()=> _goAddPatient(Patients(
+          address: '',
+          city: City(id: 0, description: ''),
+          age: 0,
+          bloodType: bloodtypes(id: 0, description: ''),
+          date: '',
+          dateLocal: '',
+          description: '',
+          epcnNumber: 0, 
+          firstName: '',
+          fullName: '',
+          gendre: Gendre(id: 0, description: ''),
+          histories: [],
+          historiesCount: 0,
+          id:0,
+          imageFullPath: '', 
+          lastName: '',
+          mobilePhone: '',
+          natianality: Natinality(id: 0, description: ''),
+          patientPhotos: [],
+          patientPhotosCount: 0,
+         )),            
       )
     );
   }
@@ -214,7 +241,20 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               });
       }
       
-        _goAdd() {}
+        void _goAddPatient(Patients patients)async {
+          String? result= await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context)=> PatientScreen(
+                token: widget.token, user: _user, patient: patients
+                )
+              )
+            );
+            if(result=="Yes")
+            {
+              _getUser();
+            }
+        }
         
       Widget _getContent() {
               return Column(
@@ -240,105 +280,107 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
        
         Widget _getListView() {
          return RefreshIndicator(
-      onRefresh: _getUser,
-      child: ListView(
-        children: _user.patients.map((e) {
-          return Card(
-            child: InkWell(
-              onTap: () {},
-              child: Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(5),
-                child: Row(
-                  children: <Widget>[
-                    CachedNetworkImage(
-                      imageUrl: e.imageFullPath,
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                      fit: BoxFit.cover,
-                      height: 80,
-                      width: 80,
-                      placeholder: (context, url) => Image(
-                        image: AssetImage('assets/vehicles_logo.png'),
-                        fit: BoxFit.cover,
-                        height: 80,
-                        width: 80,
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
+          onRefresh: _getUser,
+          child: ListView(
+            children: _user.patients.map((e) {
+              return Card(
+                child: InkWell(
+                  onTap: () =>_goPatient(e),
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(5),
+                    child: Row(
+                      children: <Widget>[
+                        CachedNetworkImage(
+                          imageUrl: e.imageFullPath,
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          fit: BoxFit.cover,
+                          height: 80,
+                          width: 80,
+                          placeholder: (context, url) => Image(
+                            image: AssetImage('assets/noimage.png'),
+                            fit: BoxFit.cover,
+                            height: 80,
+                            width: 80,
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: <Widget>[
-                                Text(
-                                  e.fullName,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold
-                                  ),                                  
-                                ),                                                              
-                                Row(
-                                  children: [
-                                    Text('Adress:'                                    
-                                    ),
-                                    SizedBox(width: 5,),
-                                    Text(                                      
-                                      e.address,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    SizedBox(width: 5,),
-                                    Text("Age:"),
-                                      SizedBox(width: 5,),
+                                Column(
+                                  children: <Widget>[
                                     Text(
-                                      e.age.toString(),
+                                      e.fullName,
                                       style: TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),                                   
-                                  ],
-                                ),
-                                  Row(
-                                  children: [
-                                    Text('Nationality:'                                    
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold
+                                      ),                                  
+                                    ),                                                              
+                                    Row(
+                                      children: [
+                                        Text('Adress:'                                    
+                                        ),
+                                        SizedBox(width: 5,),
+                                        Text(                                      
+                                          e.address,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        SizedBox(width: 5,),
+                                        Text("Age:"),
+                                          SizedBox(width: 5,),
+                                        Text(
+                                          e.age.toString(),
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),                                   
+                                      ],
                                     ),
-                                    SizedBox(width: 5,),
-                                    Text(                                      
-                                      e.natianality.description,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                      ),
+                                      Row(
+                                      children: [
+                                        Text('Nationality:'                                    
+                                        ),
+                                        SizedBox(width: 5,),
+                                        Text(                                      
+                                          e.natianality.description,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        SizedBox(width: 5,),
+                                        Text("Blood Type:"),
+                                          SizedBox(width: 5,),
+                                        Text(
+                                          e.bloodType.description,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),                                   
+                                      ],
                                     ),
-                                    SizedBox(width: 5,),
-                                    Text("Blood Type:"),
-                                      SizedBox(width: 5,),
-                                    Text(
-                                      e.bloodType.description,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                      ),
-                                    ),                                   
                                   ],
                                 ),
                               ],
                             ),
-                          ],
+                          )
                         ),
-                      )
+                        Icon(Icons.arrow_forward_ios, size: 40,)
+                      ],
                     ),
-                    Icon(Icons.arrow_forward_ios, size: 40,)
-                  ],
+                  ),
                 ),
-              ),
-            ),
-          );
-        }).toList(),
-      ), 
+              );
+            }).toList(),
+          ), 
     );
         }
 
+  _goPatient(Patients e) {}
+    
   }    
   

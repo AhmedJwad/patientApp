@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:email_validator/email_validator.dart';
@@ -437,20 +438,27 @@ void  _save() {
                              width: 160,
                              fit: BoxFit.cover,
                             )
-                            :FadeInImage(
-                            placeholder: AssetImage('/assets/noimage.png'),
-                             image:NetworkImage(widget.user.imageFullPath),
-                             width: 160,
-                             height: 160,
-                             fit: BoxFit.cover,
-                             ),
-                        ),
+                          : CachedNetworkImage(
+                                imageUrl: widget.user.imageFullPath,
+                                errorWidget: (context, url, error) => Icon(Icons.error),
+                                fit: BoxFit.cover,
+                                height: 160,
+                                width: 160,
+                                placeholder: (context, url) => Image(
+                                  image: AssetImage('assets/vehicles_logo.png'),
+                                  fit: BoxFit.cover,
+                                  height: 160,
+                                  width: 160,
+                    ),
+                       
+                          ),
+                           ),
             ),
              Positioned(
               bottom: 0,
               left: 100,
               child: InkWell(
-                onTap: ()=>_Takepicture,
+                onTap: ()=>_Takepicture(),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(30),
                   child: Container(
