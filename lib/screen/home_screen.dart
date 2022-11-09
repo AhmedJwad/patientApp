@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:healthcare/models/UserPatient.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/screen/Cities_Screen.dart';
 import 'package:healthcare/screen/Gendre_Screen.dart';
 import 'package:healthcare/screen/Gendres_Screen.dart';
 import 'package:healthcare/screen/Nationalities_Screen.dart';
+import 'package:healthcare/screen/UserPatients.dart';
 import 'package:healthcare/screen/Users_Screen.dart';
 import 'package:healthcare/screen/bloodtype_Screen.dart';
 import 'package:healthcare/screen/diagnosic_screen.dart';
@@ -143,6 +145,18 @@ Widget _getBody() {
                   context, 
                   MaterialPageRoute(
                   builder: (context) =>UsersSCeen(token: widget.token,)
+                  )
+                    );
+        },
+        ),
+           ListTile(
+        leading: Icon(Icons.supervised_user_circle_sharp),
+        title: const Text('Users of Patients'),
+        onTap: () {
+                    Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) =>UserPatients(token: widget.token,)
                   )
                     );
         },

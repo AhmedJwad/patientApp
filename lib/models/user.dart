@@ -1,4 +1,3 @@
-
 import 'package:healthcare/models/patient.dart';
 
 class User {

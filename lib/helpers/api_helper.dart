@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:healthcare/models/City.dart';
 import 'package:healthcare/models/Diagnosic.dart';
 import 'package:healthcare/models/Nationality.dart';
+import 'package:healthcare/models/UserPatient.dart';
 import 'package:healthcare/models/bloodtypes.dart';
 import 'package:healthcare/models/gendre.dart';
 import 'package:healthcare/models/response.dart';
@@ -291,5 +292,34 @@ static Future<Response> Getbloodtypes(Token token)async
         return true;
       }
       return false;
+     }  
+     static Future<Response> GetUsersPatient(Token token)async
+  {
+     if (!_validToken(token)) {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
+    var url=Uri.parse('${constans.apiUrl}/api/UserPatients');
+    var response=await http.get(
+    url, 
+        headers: {
+        'content-type' : 'application/json',
+        'accept' : 'application/json',
+        'authorization':'bearer ${token.token}' ,
+          } , 
+   );    
+    var body=response.body;
+   if(response.statusCode >= 400)
+   {
+    return Response(isSuccess: false, result:body);
+   }
+  List<userPatient> list=[] ;  
+   var decodedjson=jsonDecode(body);
+   if(decodedjson != null)
+   {
+     for (var item in decodedjson) {
+       list.add(userPatient.fromJson(item));
+     }
+   }
+     return Response(isSuccess: true, result: list);
      }  
 }

@@ -1,10 +1,12 @@
 import 'package:healthcare/models/Patient_Photo.dart';
 import 'package:healthcare/models/City.dart';
 import 'package:healthcare/models/Diagnosic.dart';
+import 'package:healthcare/models/UserPatient.dart';
 import 'package:healthcare/models/gendre.dart';
 import 'package:healthcare/models/Nationality.dart';
 import 'package:healthcare/models/bloodtypes.dart';
 import 'package:healthcare/models/history.dart';
+import 'package:healthcare/models/user.dart';
 import 'package:http/http.dart';
 class Patients {
   int id=0;
@@ -27,7 +29,7 @@ class Patients {
   Natinality natianality=Natinality(id: 0, description: '');
   Gendre gendre=Gendre(id: 0, description: '');
   bloodtypes bloodType=bloodtypes(id: 0, description: '');
-
+  
 
   Patients(
       {required this.id,
@@ -49,7 +51,9 @@ class Patients {
        required this.city,
        required this.natianality,
        required this.gendre,      
-       required this.bloodType});
+       required this.bloodType,
+     
+      });
 
   Patients.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -81,7 +85,8 @@ class Patients {
     city = City.fromJson(json['city']) ;
     natianality =Natinality.fromJson(json['natianality']);        
     gendre = Gendre.fromJson(json['gendre']) ;
-    bloodType = bloodtypes.fromJson(json['bloodType']);       
+    bloodType = bloodtypes.fromJson(json['bloodType']);   
+   
   }
 
   Map<String, dynamic> toJson() {
@@ -106,6 +111,7 @@ class Patients {
     data['natianality'] = this.natianality.toJson();   
     data['gendre'] = this.gendre.toJson();    
     data['bloodType'] = this.bloodType.toJson();   
+ 
     return data;
   }
 }

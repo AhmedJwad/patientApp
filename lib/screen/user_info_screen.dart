@@ -34,15 +34,10 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(_user.fullName),),
-      body: Stack(
-        children: <Widget>[
-          Column(
-           children:<Widget> [
-               _showUserinfo(),              
-           ],
-          ),     
-          _showLoader?LoaderComponent(text: 'please wait',)  :Container(),  
-        ],
+      body: Center(
+        child: _showLoader 
+          ? LoaderComponent(text: 'please wait...',) 
+          : _getContent(),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -209,17 +204,141 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   title: 'Error', 
                   message: response.message,
                   actions: <AlertDialogAction>[
-                      AlertDialogAction(key: null, label: 'Aceptar'),
+                      AlertDialogAction(key: null, label: 'Accept'),
                   ]
                 );    
                 return;
               }
               setState(() {                 
-                _user=response.result;
+                _user=response.result;                
               });
       }
       
         _goAdd() {}
+        
+      Widget _getContent() {
+              return Column(
+                children: <Widget>[
+                  _showUserinfo(),
+                  Expanded(
+                    child: _user.patients.length == 0 ? _noContent() : _getListView(),
+                  ),
+                ],
+              );
+  }
+       Widget   _noContent() {
+        return Center(
+          child: Container(
+            margin:EdgeInsets.all(20),
+            child: Text(
+              'The user has no patients registered.',
+              style: TextStyle(fontSize: 16 , fontWeight: FontWeight.bold,),
+            ),
+          ),
+        );
+       }
+       
+        Widget _getListView() {
+         return RefreshIndicator(
+      onRefresh: _getUser,
+      child: ListView(
+        children: _user.patients.map((e) {
+          return Card(
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.all(5),
+                child: Row(
+                  children: <Widget>[
+                    CachedNetworkImage(
+                      imageUrl: e.imageFullPath,
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      fit: BoxFit.cover,
+                      height: 80,
+                      width: 80,
+                      placeholder: (context, url) => Image(
+                        image: AssetImage('assets/vehicles_logo.png'),
+                        fit: BoxFit.cover,
+                        height: 80,
+                        width: 80,
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Column(
+                              children: <Widget>[
+                                Text(
+                                  e.fullName,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold
+                                  ),                                  
+                                ),                                                              
+                                Row(
+                                  children: [
+                                    Text('Adress:'                                    
+                                    ),
+                                    SizedBox(width: 5,),
+                                    Text(                                      
+                                      e.address,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    SizedBox(width: 5,),
+                                    Text("Age:"),
+                                      SizedBox(width: 5,),
+                                    Text(
+                                      e.age.toString(),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),                                   
+                                  ],
+                                ),
+                                  Row(
+                                  children: [
+                                    Text('Nationality:'                                    
+                                    ),
+                                    SizedBox(width: 5,),
+                                    Text(                                      
+                                      e.natianality.description,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    SizedBox(width: 5,),
+                                    Text("Blood Type:"),
+                                      SizedBox(width: 5,),
+                                    Text(
+                                      e.bloodType.description,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                    ),                                   
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ),
+                    Icon(Icons.arrow_forward_ios, size: 40,)
+                  ],
+                ),
+              ),
+            ),
+          );
+        }).toList(),
+      ), 
+    );
+        }
 
   }    
   
