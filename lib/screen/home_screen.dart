@@ -33,31 +33,33 @@ class  _homescreenState extends State<HomeScreen> {
   }
   
 Widget _getBody() {
-  return Container(
-    margin: EdgeInsets.all(30),
-    child:Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-     children:[
-      ClipRRect(
-        borderRadius: BorderRadius.circular(150),
-        child:  FadeInImage(
-                            placeholder: AssetImage('assets/logo.jpg'),
-                            image: NetworkImage(widget.token.user.imageFullPath),
-                            height: 300,
-                            width: 300,
-                            fit: BoxFit.cover,                           
-        ),
-      ),     
-        SizedBox(height: 30,),
-      Center(
-        child: Text(
-          'welcome! ${widget.token.user.fullName}',
-          style: TextStyle(fontSize: 20 , fontWeight: FontWeight.bold),
-          
+  return SingleChildScrollView(
+    child: Container(
+      margin: EdgeInsets.all(30),
+      child:Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+       children:[
+        ClipRRect(
+          borderRadius: BorderRadius.circular(150),
+          child:  FadeInImage(
+                              placeholder: AssetImage('assets/logo.jpg'),
+                              image: NetworkImage(widget.token.user.imageFullPath),
+                              height: 300,
+                              width: 300,
+                              fit: BoxFit.cover,                           
           ),
-      ),
-     ],
-    ) 
+        ),     
+          SizedBox(height: 30,),
+        Center(
+          child: Text(
+            'welcome! ${widget.token.user.fullName}',
+            style: TextStyle(fontSize: 20 , fontWeight: FontWeight.bold),
+            
+            ),
+        ),
+       ],
+      ) 
+    ),
   );
 }
 

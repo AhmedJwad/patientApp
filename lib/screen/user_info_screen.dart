@@ -382,7 +382,20 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     );
         }
 
-  _goPatient(Patients e) {}
+ void _goPatient(Patients e) async{
+   String? result= await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context)=> PatientScreen(
+                token: widget.token, user: _user, patient: e
+                )
+              )
+            );
+            if(result=="Yes")
+            {
+              _getUser();
+            }
+ }
     
   }    
   
