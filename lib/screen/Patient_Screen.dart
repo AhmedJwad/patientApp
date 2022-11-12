@@ -167,7 +167,7 @@ class _patientScreenState extends State<PatientScreen> {
                                 height: 160,
                                 width: 160,
                                 placeholder: (context, url) => Image(
-                                  image: AssetImage('assets/vehicles_logo.png'),
+                                  image: AssetImage('assets/noimage.png'),
                                   fit: BoxFit.cover,
                                   height: 160,
                                   width: 160,
