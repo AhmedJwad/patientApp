@@ -14,6 +14,7 @@ import 'package:healthcare/models/token.dart';
 import 'package:healthcare/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:healthcare/screen/Patient_Screen.dart';
+import 'package:healthcare/screen/patient_info_screen.dart';
 import 'package:healthcare/screen/user_screen.dart';
 
 class UserInfoScreen extends StatefulWidget {
@@ -200,6 +201,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
     );
     if (result == 'yes') {
      //TODO:pending refrence user info
+     _getUser();
     }  
     }
     
@@ -252,7 +254,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                 )
               )
             );
-            if(result=="Yes")
+            if(result=="yes")
             {
               _getUser();
             }
@@ -386,16 +388,17 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
    String? result= await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context)=> PatientScreen(
+              builder: (context)=> PatientInfoScreen(
                 token: widget.token, user: _user, patient: e
                 )
               )
             );
-            if(result=="Yes")
+            if(result=="yes")
             {
               _getUser();
             }
  }
+ 
     
   }    
   

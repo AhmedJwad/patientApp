@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:healthcare/models/City.dart';
@@ -37,7 +38,7 @@ class _patientScreenState extends State<PatientScreen> {
   bool _photochanged=false;
   late XFile _image;
   int _current=0;
-
+   CarouselController _carouselController = CarouselController();
   int _cityId=0;
   String _CityError='';
   bool _cityShowError=false;
@@ -140,7 +141,14 @@ class _patientScreenState extends State<PatientScreen> {
       ),
     );
   }
-  Widget _showPatientPhoto() {
+   Widget _showPatientPhoto() {
+    return widget.patient.id==0?
+    _showPatientUniquePhoto():
+    _showPhotosCarousel();
+
+   }
+
+  Widget _showPatientUniquePhoto() {
     return  Stack(
             children:<Widget>[
                Container(
@@ -549,7 +557,7 @@ Widget  _showButtons() {
   );
 }
 
-  void _Takepicture() async{
+    Future<Null>  _Takepicture() async{
       WidgetsFlutterBinding.ensureInitialized();
               final camera= await availableCameras();
               final firstcamera=camera.first;
@@ -567,7 +575,7 @@ Widget  _showButtons() {
               }    
   }
   
- void _selectPicture()async {
+   Future<Null>  _selectPicture()async {
   final ImagePicker _picker= ImagePicker();
               final XFile? image= await _picker.pickImage(source: ImageSource.gallery);
               if(image !=null)
@@ -1192,6 +1200,267 @@ List<DropdownMenuItem<int>> list=[];
     Response response = await Apihelper.Delete(
       '/api/Patients/', 
       widget.patient.id.toString(), 
+      widget.token
+    );
+
+    setState(() {
+      _showLoader = false;
+    });
+
+    if (!response.isSuccess) {
+      await showAlertDialog(
+        context: context,
+        title: 'Error', 
+        message: response.message,
+        actions: <AlertDialogAction>[
+            AlertDialogAction(key: null, label: 'Accept'),
+        ]
+      );    
+      return;
+    }
+
+    Navigator.pop(context, 'yes');
+  }
+  
+ Widget _showPhotosCarousel() {
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 10),
+    child: Column(
+      children: [
+        CarouselSlider(
+              options: CarouselOptions(height: 200, autoPlay: true,autoPlayInterval: Duration(seconds: 3), 
+              enlargeCenterPage: true,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _current=index;
+                });
+              } ,),
+               carouselController: _carouselController,
+              items: widget.patient.patientPhotos.map((i) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 5),                 
+                      child: ClipRRect(
+                      borderRadius: BorderRadius.circular(30),
+                        child: CachedNetworkImage(
+                                      imageUrl: i.imageFullPath,
+                                      errorWidget: (context, url, error) => Icon(Icons.error),
+                                      fit: BoxFit.cover,
+                                      height: 160,
+                                      width: 160,
+                                      placeholder: (context, url) => Image(
+                                        image: AssetImage('assets/noimage.png'),
+                                        fit: BoxFit.cover,
+                                        height: 160,
+                                        width: 160,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
+),
+        Row(
+           mainAxisAlignment: MainAxisAlignment.center,
+            children: widget.patient.patientPhotos.asMap().entries.map((entry) {
+              return GestureDetector(
+                onTap: () => _carouselController.animateToPage(entry.key),
+                child: Container(
+                  width: 12.0,
+                  height: 12.0,
+                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: (Theme.of(context).brightness == Brightness.dark
+                              ? Colors.white
+                              : Colors.black)
+                          .withOpacity(_current == entry.key ? 0.9 : 0.4)),
+                ),
+              );
+            }).toList(),
+        ),
+         _showImageButtons()   
+      ],           
+    )      ,
+  );
+  }
+  
+ Widget _showImageButtons() {
+  return Container(
+    margin: EdgeInsets.only(left: 10 , right: 10),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Expanded(          
+          child: ElevatedButton(        
+            child: Row
+            (
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.add_a_photo),
+              Text('Add Photo'),
+            ],
+        ),
+          style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return Color(0xFF120E43);
+                  }
+                ),
+              ),
+            onPressed: () => _goAddPhoto(),
+          ),
+                
+        ),
+           SizedBox(width: 20,),
+           Expanded(
+            child: ElevatedButton(
+              child:Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Icon(Icons.delete),
+                  Text('Delete Photo'),
+                ],
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return Color(0xFFB4161B);
+                  }
+                ),
+              ),
+              onPressed: ()=> _confirmDeletePhoto(), 
+              ),
+            ),
+      ],
+    ),
+  );
+ }
+ 
+ void _goAddPhoto() async{
+   var response = await showAlertDialog(
+      context: context,
+      title: 'Confirmation', 
+      message: 'Where do you want to get the image from?',
+      actions: <AlertDialogAction>[
+          AlertDialogAction(key: 'cancel', label: 'cancel'),
+          AlertDialogAction(key: 'camera', label: 'camera'),
+          AlertDialogAction(key: 'gellery', label: 'Images'),
+      ]
+    );   
+
+    if (response == 'cancel') {
+      return;
+    } 
+
+    if (response == 'camera') {     
+      await _Takepicture();
+    } else {
+      await _selectPicture();
+    }
+ 
+    if (_photochanged) {
+      _addPicture();
+    }
+ }
+  
+ void _confirmDeletePhoto() async{
+   var response =  await showAlertDialog(
+      context: context,
+      title: 'Confirmation', 
+      message: 'Are you sure you want to delete the last photo taken?',
+      actions: <AlertDialogAction>[
+          AlertDialogAction(key: 'no', label: 'No'),
+          AlertDialogAction(key: 'yes', label: 'yes'),
+      ]
+    );    
+
+    if (response == 'yes') {
+      _deletePhoto();
+    }
+ }
+  
+  void _addPicture() async{
+    setState(() {
+      _showLoader = true;
+    });
+
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        _showLoader = false;
+      });
+      await showAlertDialog(
+        context: context,
+        title: 'Error', 
+        message: 'check your internet connection.',
+        actions: <AlertDialogAction>[
+            AlertDialogAction(key: null, label: 'Accept'),
+        ]
+      );    
+      return;
+    }
+
+    List<int> imageBytes = await _image.readAsBytes();
+    String base64Image = base64Encode(imageBytes);
+
+    Map<String, dynamic> request = {
+      'PatientId': widget.patient.id,
+      'Image': base64Image
+    };
+
+    Response response = await Apihelper.Post(
+      '/api/PhotosPatient',
+      request,
+      widget.token
+    );
+
+    setState(() {
+      _showLoader = false;
+    });
+
+    if (!response.isSuccess) {
+      await showAlertDialog(
+        context: context,
+        title: 'Error', 
+        message: response.message,
+        actions: <AlertDialogAction>[
+            AlertDialogAction(key: null, label: 'Accept'),
+        ]
+      );    
+      return;
+    }
+
+    Navigator.pop(context, 'yes');
+  }
+  
+  void _deletePhoto() async{
+     setState(() {
+      _showLoader = true;
+    });
+
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        _showLoader = false;
+      });
+      await showAlertDialog(
+        context: context,
+        title: 'Error', 
+        message: 'Verifica que estes conectado a internet.',
+        actions: <AlertDialogAction>[
+            AlertDialogAction(key: null, label: 'Aceptar'),
+        ]
+      );    
+      return;
+    }
+
+    Response response = await Apihelper.Delete(
+      '/api/PhotosPatient/', 
+      widget.patient.patientPhotos[widget.patient.patientPhotos.length - 1].id.toString(), 
       widget.token
     );
 
