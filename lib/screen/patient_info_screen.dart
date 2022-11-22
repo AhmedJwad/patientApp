@@ -11,7 +11,6 @@ import 'package:healthcare/models/user.dart';
 import 'package:healthcare/screen/Patient_Screen.dart';
 import 'package:healthcare/screen/history_screen.dart';
 import 'package:intl/intl.dart';
-
 import '../components/loader_component.dart';
 
 
@@ -71,7 +70,7 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
         builder: (context) => HistoryScreen(
           token: widget.token, 
           user: widget.user, 
-          patient:widget.patient,          
+          patient:widget.patient,         
         
         ) 
       )
@@ -108,11 +107,11 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
                   children: <Widget>[                   
                     Expanded(                     
                       child: Container(                                           
-                        margin: EdgeInsets.symmetric(horizontal: 10),                                                
+                        margin: EdgeInsets.symmetric(horizontal: 10), 
+                                                                       
                         child: Row(                          
                           mainAxisAlignment: MainAxisAlignment.start,                          
-                          children: <Widget>[ 
-                                    
+                          children: <Widget>[                                     
                             Column(                              
                               children: <Widget>[                               
                                 Row(
@@ -128,7 +127,7 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
                                   '${DateFormat('yyyy-MM-dd').format(DateTime.parse(e.dateLocal))}',
                                   style: TextStyle(
                                     fontSize: 14,
-                                    fontWeight: FontWeight.bold
+                                    fontWeight: FontWeight.normal
                                   ),
                                 ),
                                   ],
@@ -165,7 +164,7 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
                                       e.illnesses,
                                       style: TextStyle(
                                         fontSize: 14,
-                                         fontWeight: FontWeight.bold,
+                                         fontWeight: FontWeight.normal,
                                       ),
                                     ),
                                   ],

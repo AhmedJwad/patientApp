@@ -5,6 +5,7 @@ import 'package:healthcare/models/Diagnosic.dart';
 import 'package:healthcare/models/Nationality.dart';
 import 'package:healthcare/models/bloodtypes.dart';
 import 'package:healthcare/models/gendre.dart';
+import 'package:healthcare/models/history.dart';
 import 'package:healthcare/models/patient.dart';
 import 'package:healthcare/models/response.dart';
 import 'package:healthcare/helpers/constans.dart';
@@ -13,6 +14,25 @@ import 'package:healthcare/models/user.dart';
 import 'package:healthcare/models/UserPatient.dart';
 import 'package:http/http.dart'as http;
 class Apihelper {
+  static Future<Response> getHistory(Token token, String id)async{
+    if(!!_validToken(token))
+    {
+      return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+    }
+    var url=Uri.parse('${constans.apiUrl}/api/Histories/$id');
+    var response=await http.get(url, headers: {
+        'content-type' : 'application/json',
+        'accept' : 'application/json',
+        'authorization': 'bearer ${token.token}',
+    },);
+    var body=response.body;
+    if(response.statusCode>=400)
+    {
+      return Response(isSuccess: false, message: body);
+    }
+    var decodedJson=jsonDecode(body);
+    return Response(isSuccess: true, result: Histories.fromJson(decodedJson));
+  }
    static Future<Response> getPatient(Token token, String id) async {
     if (!_validToken(token)) {
       return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
