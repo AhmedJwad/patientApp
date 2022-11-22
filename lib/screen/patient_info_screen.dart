@@ -71,12 +71,12 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
           token: widget.token, 
           user: widget.user, 
           patient:widget.patient,         
-        
+         history: histories,
         ) 
       )
     );
     if (result == 'yes') {
-     
+      await _getPatient();     
     }    
   }
   
@@ -460,13 +460,13 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
                         Row(
                           children: <Widget>[
                             Text(
-                              '# Historias: ', 
+                              '# Histories: ', 
                               style: TextStyle(
                                 fontWeight: FontWeight.bold
                               )
                             ),
                             Text(
-                             widget.patient.historiesCount.toString(), 
+                             _patient.historiesCount.toString(), 
                               style: TextStyle(
                                 fontSize: 14,
                               ),
@@ -564,6 +564,21 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
     });
   }
   
-  _goHistory(Histories e) {}
+ void _goHistory(Histories e) async{
+     String? result = await  Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => HistoryScreen(
+          token: widget.token, 
+          user: widget.user, 
+          patient:widget.patient,         
+         history: e,
+        ) 
+      )
+    );
+    if (result == 'yes') {
+      await _getPatient();     
+    }    
+  }
  
 }
