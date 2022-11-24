@@ -368,13 +368,13 @@ Widget  _showResult() {
       return;
     }
 
-    Map<String, dynamic> request = {
-      'Id': widget.history.id,
+    Map<String, dynamic> request = {     
+      'id': widget.history.id,
       'allergies': _allergies,
       'illnesses':_illnesses,
       'surgeries': _surgeries,
-      'Result': _result,
-      'patientId':widget.patient.id,
+      'Result': _result, 
+      'patientId':widget.patient.id,     
     };
 
     Response response = await Apihelper.Put(
@@ -448,4 +448,6 @@ Widget  _showResult() {
 
     Navigator.pop(context, 'yes');
   }     
+
+  
 }

@@ -13,26 +13,34 @@ import 'package:healthcare/models/token.dart';
 import 'package:healthcare/models/user.dart';
 import 'package:healthcare/models/UserPatient.dart';
 import 'package:http/http.dart'as http;
+
 class Apihelper {
-  static Future<Response> getHistory(Token token, String id)async{
-    if(!!_validToken(token))
-    {
+
+  static Future<Response> getHistory(Token token, String id) async {
+    if (!_validToken(token)) {
       return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
     }
-    var url=Uri.parse('${constans.apiUrl}/api/Histories/$id');
-    var response=await http.get(url, headers: {
+
+    var url = Uri.parse('${constans.apiUrl}/api/Histories/$id');
+    var response = await http.get(
+      url,
+      headers: {
         'content-type' : 'application/json',
         'accept' : 'application/json',
         'authorization': 'bearer ${token.token}',
-    },);
-    var body=response.body;
-    if(response.statusCode>=400)
-    {
+      },
+    );
+
+    var body = response.body;
+    if (response.statusCode >= 400) {
       return Response(isSuccess: false, message: body);
     }
-    var decodedJson=jsonDecode(body);
+
+    var decodedJson = jsonDecode(body);
     return Response(isSuccess: true, result: Histories.fromJson(decodedJson));
   }
+
+
    static Future<Response> getPatient(Token token, String id) async {
     if (!_validToken(token)) {
       return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
@@ -56,6 +64,8 @@ class Apihelper {
     var decodedJson = jsonDecode(body);
     return Response(isSuccess: true, result: Patients.fromJson(decodedJson));
   }
+
+
   static Future<Response> GetUsers(Token token)async
   {
      if (!_validToken(token)) {
@@ -85,6 +95,8 @@ class Apihelper {
    }
      return Response(isSuccess: true, result: list);
      }  
+
+     
       static Future<Response> getUser(Token token, String id) async {
     if (!_validToken(token)) {
       return Response(isSuccess: false, message: 'Sus credenciales se han vencido, por favor cierre sesión y vuelva a ingresar al sistema.');

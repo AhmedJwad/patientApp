@@ -9,6 +9,7 @@ import 'package:healthcare/models/response.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/models/user.dart';
 import 'package:healthcare/screen/Patient_Screen.dart';
+import 'package:healthcare/screen/history_info_screen.dart';
 import 'package:healthcare/screen/history_screen.dart';
 import 'package:intl/intl.dart';
 import '../components/loader_component.dart';
@@ -35,6 +36,7 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
     // TODO: implement initState
     super.initState();     
     _patient=widget.patient;      
+    _getPatient();    
   }
   @override
   Widget build(BuildContext context) {
@@ -85,7 +87,7 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
       children: <Widget>[
         _showPatientInfo(),
         Expanded(
-          child: widget.patient.histories.length==0? _noContent():_getListView(),
+          child: _patient.histories.length==0? _noContent():_getListView(),
           )
       ],
 
@@ -482,6 +484,7 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
           ),
         ],
       ),
+        
     );
  }
 
@@ -564,15 +567,15 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
     });
   }
   
- void _goHistory(Histories e) async{
+ void _goHistory(Histories history) async{
      String? result = await  Navigator.push(
       context, 
       MaterialPageRoute(
-        builder: (context) => HistoryScreen(
+        builder: (context) => HistoryInfoScreen(
           token: widget.token, 
           user: widget.user, 
           patient:widget.patient,         
-         history: e,
+         history: history,
         ) 
       )
     );
