@@ -3,7 +3,7 @@ import 'package:healthcare/models/Diagnosic.dart';
   class Details {
   int id=0;
   diagnosic diagonisic=diagnosic(id: 0, description: '');
-  String? description='';
+  String description='';
 
   Details({required this.id,required this.diagonisic,required this.description});
 

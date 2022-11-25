@@ -27,6 +27,8 @@ HistoryScreen({required this.token , required this.user , required this.patient,
 }
 
 class  _historyScreen extends State<HistoryScreen> {
+
+  late Histories _history;
 bool _showLoader=false;
 
 
@@ -50,12 +52,13 @@ String _resultError='';
 bool _resultShowError=false;
 TextEditingController _resultController= TextEditingController();
 
-  get _showButtons => null;
+  
 
   @override
   void initState() {
     // TODO: implement initState
-    super.initState();
+    super.initState();    
+   
     _allergies=widget.history.allergies;
     _allergiesController.text=_allergies;
 
@@ -449,5 +452,5 @@ Widget  _showResult() {
     Navigator.pop(context, 'yes');
   }     
 
-  
+ 
 }

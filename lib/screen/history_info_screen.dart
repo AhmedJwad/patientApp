@@ -581,7 +581,7 @@ class  _historyInfoScreenstate extends State<HistoryInfoScreen> {
                                 ),
                               ),
                                 Text(
-                                e.description == null ? 'NA' : e.description!,
+                                e.description == null ? 'NA' : e.description,
                                 style: TextStyle(
                                   fontSize: 14,
                                 ),
@@ -687,8 +687,8 @@ class  _historyInfoScreenstate extends State<HistoryInfoScreen> {
         builder: (context) => HistoryScreen(
           token: widget.token, 
           user: widget.user, 
-          patient:widget.patient,         
-          history: widget.history,
+          patient:_patient,         
+          history: _history,
         ) 
       )
     );
