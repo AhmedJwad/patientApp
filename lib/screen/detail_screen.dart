@@ -113,6 +113,7 @@ class _detailScreenState extends State<DetailScreen> {
   void _loadFieldValues() {
     _daignosicId=widget.details.diagonisic.id;
     _description=widget.details.description;
+   _descriptionController.text=_description;
   }
   
  Widget _showDiagnosics() {
@@ -144,7 +145,7 @@ Widget  _showDescription() {
   return Container(
      padding: EdgeInsets.all(10),
       child: TextField(
-        keyboardType: TextInputType.text,
+        keyboardType: TextInputType.multiline,
         minLines: 4,
         maxLines: 4,
         controller: _descriptionController,
