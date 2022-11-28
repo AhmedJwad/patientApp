@@ -7,6 +7,7 @@ import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/constans.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/screen/home_screen.dart';
+import 'package:healthcare/screen/register_user_screen.dart';
 import 'package:http/http.dart'as http;
 import 'package:connectivity/connectivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -148,7 +149,7 @@ Widget _showpassword() {
             }
           ),
         ),
-           onPressed: (){}
+           onPressed: ()=>_register()
            ),
        ),
      ],
@@ -269,6 +270,13 @@ Widget _showpassword() {
     await pref.setBool('isRemembered', true);
     await pref.setString('userBody', body);
   }
+  
+ void _register() {
+  Navigator.push(
+    context, 
+   MaterialPageRoute(builder: (context)=> RegisterUserScreen())
+    );
+ }
   
  
  }
