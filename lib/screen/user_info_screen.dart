@@ -196,6 +196,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
         builder: (context) => UserScreen(
           token: widget.token, 
           user:_user ,
+          myProfile: false,
         )
       )
     );

@@ -11,6 +11,7 @@ import 'package:healthcare/screen/Users_Screen.dart';
 import 'package:healthcare/screen/bloodtype_Screen.dart';
 import 'package:healthcare/screen/diagnosic_screen.dart';
 import 'package:healthcare/screen/login_screen.dart';
+import 'package:healthcare/screen/user_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -180,6 +181,21 @@ Widget _getBody() {
         },
         ),
          ListTile(
+        leading: Icon(Icons.supervised_user_circle_sharp),
+        title: const Text('Edit Profile'),
+        onTap: () {
+                    Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) =>UserScreen(token: widget.token,                  
+                    user: widget.token.user,
+                     myProfile: true,
+                    )
+                  )
+                 );
+        },
+        ),
+         ListTile(
         leading: Icon(Icons.login_outlined),
         title: const Text('Log out'),
         onTap: () =>_logOut(),
@@ -211,10 +227,19 @@ Widget _getBody() {
             color: Colors.black, 
             height: 2,
           ),
-           ListTile(
-        leading: Icon(Icons.edit),
+            ListTile(
+        leading: Icon(Icons.supervised_user_circle_sharp),
         title: const Text('Edit Profile'),
-        onTap: () {          
+        onTap: () {
+                    Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) =>UserScreen(token: widget.token,                  
+                    user: widget.token.user,
+                     myProfile: true,
+                    )
+                  )
+                 );
         },
         ),
          ListTile(

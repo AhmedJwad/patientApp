@@ -19,8 +19,8 @@ import '../models/user.dart';
 class UserScreen extends StatefulWidget {
 final Token token;
   final User user;
-  
-  UserScreen({required this.token , required this.user});
+  final bool myProfile;
+  UserScreen({required this.token , required this.user , required this.myProfile});
 
   @override
  _userScreen createState() => _userScreen();
@@ -150,7 +150,21 @@ class _userScreen extends State<UserScreen> {
             ? Container() 
             : SizedBox(width: 20,),
           widget.user.id.isEmpty
-            ? Container() 
+           ? Container() 
+            : widget.myProfile 
+              ? Expanded(
+                  child: ElevatedButton(
+                    child: Text('Change Password'),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                          return Color(0xFFB4161B);
+                        }
+                      ),
+                    ),
+                    onPressed: () => _changePassword(), 
+                  )
+                ) 
             : Expanded(
                 child: ElevatedButton(
                   child: Text('Delete'),
@@ -614,4 +628,6 @@ void  _save() {
                 });                
               }
              }
+             
+               _changePassword() {}
 }
