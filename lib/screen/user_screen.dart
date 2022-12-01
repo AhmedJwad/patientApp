@@ -10,6 +10,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:healthcare/helpers/api_helper.dart';
 import 'package:healthcare/models/response.dart';
+import 'package:healthcare/screen/change_password_screen.dart';
 import 'package:healthcare/screen/take_picture_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import '../components/loader_component.dart';
@@ -269,8 +270,7 @@ void  _save() {
   }
     Map<String, dynamic> request = {    
       'firstname': _firsName,  
-       'lastName': _lastName,
-       'firstname': _firsName,
+       'lastName': _lastName,    
        'email':     _email,
        'userName': _email,
        'address': _address,   
@@ -335,8 +335,7 @@ void  _save() {
      Map<String, dynamic> request = {
       'id': widget.user.id,
       'firstname': _firsName,
-      'lastName': _lastName,
-      'firstname': _firsName,
+      'lastName': _lastName,     
       'email':     _email,
       'userName': _email,
       'address': _address,   
@@ -629,5 +628,15 @@ void  _save() {
               }
              }
              
-               _changePassword() {}
+   void _changePassword() {
+       Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => ChangePasswordScreen(
+          token: widget.token,          
+        )
+      )
+    );
+   
+   }
 }
