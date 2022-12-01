@@ -1,5 +1,9 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
+import 'package:connectivity/connectivity.dart';
 import "package:flutter/material.dart";
 import 'package:healthcare/components/loader_component.dart';
+import 'package:healthcare/helpers/api_helper.dart';
+import 'package:healthcare/models/response.dart';
 import 'package:healthcare/models/token.dart';
 
 
@@ -165,6 +169,7 @@ Widget  _showConfirmPassword() {
   {
     return ;
   }
+  _changPassword();
  }
  
   bool _validateFields() {
@@ -212,5 +217,57 @@ Widget  _showConfirmPassword() {
       
     });
     return _isValid;
+  }
+  
+  void _changPassword() async{
+    setState(() {
+      _showLoader=true;
+    });
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      setState(() {
+        _showLoader = false;
+      });
+      await showAlertDialog(
+        context: context,
+        title: 'Error', 
+        message: 'Check your internet connection',
+        actions: <AlertDialogAction>[
+            AlertDialogAction(key: null, label: 'Accept'),
+        ]
+      );    
+      return;
+    }
+      Map<String, dynamic> request = {
+      'oldPassword': _currentPassword,
+      'newPassword': _newPassword,
+      'Confirm': _confirmPassword,
+    };
+
+    Response response=await Apihelper.Post( '/api/Account/ChangePassword', request, widget.token);
+    setState(() {
+      _showLoader=false;
+    });
+     if (!response.isSuccess) {
+      await showAlertDialog(
+        context: context,
+        title: 'Error', 
+        message: response.message,
+        actions: <AlertDialogAction>[
+            AlertDialogAction(key: null, label: 'Accept'),
+        ]
+      );    
+      return;
+    }
+    await showAlertDialog(
+      context: context,
+      title: 'Confirmation', 
+      message: 'Your password has been changed successfully.',
+      actions: <AlertDialogAction>[
+          AlertDialogAction(key: null, label: 'Accept'),
+      ]
+    );    
+
+    Navigator.pop(context, 'yes');
   }
 }

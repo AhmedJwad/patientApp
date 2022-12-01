@@ -1,7 +1,12 @@
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
+import 'package:healthcare/helpers/api_helper.dart';
 import 'package:healthcare/models/UserPatient.dart';
+import 'package:healthcare/models/response.dart';
 import 'package:healthcare/models/token.dart';
+import 'package:healthcare/models/user.dart';
 import 'package:healthcare/screen/Cities_Screen.dart';
 import 'package:healthcare/screen/Gendre_Screen.dart';
 import 'package:healthcare/screen/Gendres_Screen.dart';
@@ -11,19 +16,28 @@ import 'package:healthcare/screen/Users_Screen.dart';
 import 'package:healthcare/screen/bloodtype_Screen.dart';
 import 'package:healthcare/screen/diagnosic_screen.dart';
 import 'package:healthcare/screen/login_screen.dart';
+import 'package:healthcare/screen/user_info_screen.dart';
 import 'package:healthcare/screen/user_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
  final Token token;
- HomeScreen({ required this.token});
+ 
+ HomeScreen({ required this.token });
 
   @override
   _homescreenState  createState() =>  _homescreenState();
 }
 
 class  _homescreenState extends State<HomeScreen> {
+   
+   
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+   
+  }
   Widget build(BuildContext context) {
     return Scaffold(
      appBar: AppBar(
@@ -217,8 +231,17 @@ Widget _getBody() {
         ),
      ListTile(
         leading: Icon(Icons.sick),
-        title: const Text('Patients'),
-        onTap: () {          
+        title: const Text('my Patients'),
+        onTap: () { 
+           Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) =>UserInfoScreen(token: widget.token,                  
+                    user: widget.token.user,
+                    isAdmin: false,
+                    )
+                  )
+                 );         
         },
         ),
        
@@ -252,7 +275,7 @@ Widget _getBody() {
     ),
   );  
  }
- 
+  
  void _logOut() async{
    SharedPreferences pref=await SharedPreferences.getInstance();
     await pref.setBool('isRemembered', false);

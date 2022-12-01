@@ -28,6 +28,7 @@ final Token token;
 }
 
 class _userScreen extends State<UserScreen> {
+   late User _user;
   bool _showLoader = false;
   bool _photoChanged = false;
   late XFile _image;
@@ -59,8 +60,9 @@ class _userScreen extends State<UserScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState    
-     _firsName = widget.user.firstName;
+    // TODO: implement initState  
+  
+   _firsName = widget.user.firstName;
    _firsNameController.text = _firsName; 
 
    _lastName=widget.user.lastName ;
@@ -73,7 +75,7 @@ class _userScreen extends State<UserScreen> {
    _emailController.text=_email;
 
    _phoneNumber=widget.user.phoneNumber;
-   _phoneNumberController.text=_phoneNumber;
+   _phoneNumberController.text=_phoneNumber;   
 
   }
   Widget build(BuildContext context) {
@@ -147,10 +149,10 @@ class _userScreen extends State<UserScreen> {
               onPressed: () => _save(), 
             ),
           ),
-          widget.user.id.isEmpty
+        widget.user.id.isEmpty
             ? Container() 
             : SizedBox(width: 20,),
-          widget.user.id.isEmpty
+         widget.user.id.isEmpty
            ? Container() 
             : widget.myProfile 
               ? Expanded(
@@ -189,7 +191,7 @@ void  _save() {
       return;
     }
 
-    widget.user.id .isEmpty ? _addRecord() : _saveRecord();
+   widget.user.id .isEmpty ? _addRecord() : _saveRecord();
   }
   
   bool _validateFields() {
@@ -333,7 +335,7 @@ void  _save() {
       
   }
      Map<String, dynamic> request = {
-      'id': widget.user.id,
+      'id':widget.user.id,
       'firstname': _firsName,
       'lastName': _lastName,     
       'email':     _email,
@@ -345,7 +347,7 @@ void  _save() {
 
     Response response = await Apihelper.Put(
       '/api/users/', 
-      widget.user.id, 
+     widget.user.id, 
       request, 
       widget.token
     );
@@ -452,7 +454,7 @@ void  _save() {
                              fit: BoxFit.cover,
                             )
                           : CachedNetworkImage(
-                                imageUrl: widget.user.imageFullPath,
+                                imageUrl:widget.user.imageFullPath,
                                 errorWidget: (context, url, error) => Icon(Icons.error),
                                 fit: BoxFit.cover,
                                 height: 160,
@@ -595,7 +597,7 @@ void  _save() {
                           _phoneNumber = value;
                         },
                       ),
-    );
+              );
            }
            
             void  _Takepicture() async{
@@ -627,7 +629,7 @@ void  _save() {
                 });                
               }
              }
-             
+     
    void _changePassword() {
        Navigator.push(
       context, 
@@ -636,7 +638,7 @@ void  _save() {
           token: widget.token,          
         )
       )
-    );
-   
-   }
-}
+    );   
+       
+     }  
+  }

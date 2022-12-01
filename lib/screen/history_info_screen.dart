@@ -23,8 +23,8 @@ class HistoryInfoScreen extends StatefulWidget {
  final User user ;
  final Patients patient;
  final Histories history;
- 
- HistoryInfoScreen({required this.token, required this.user, required this.patient,  required this.history});
+  final bool isAdmin;
+ HistoryInfoScreen({required this.token, required this.user, required this.patient,  required this.history , required this.isAdmin});
 
   @override
   _historyInfoScreenstate createState() =>  _historyInfoScreenstate();
@@ -52,7 +52,7 @@ class  _historyInfoScreenstate extends State<HistoryInfoScreen> {
         child:  _showLoader ? LoaderComponent(text: 'loading...',) 
           : _getContent(),
       ),
-       floatingActionButton:
+       floatingActionButton:widget.isAdmin?
          FloatingActionButton(
             child: Icon(Icons.add),
             onPressed: () => _goDetail(Details(
@@ -60,7 +60,8 @@ class  _historyInfoScreenstate extends State<HistoryInfoScreen> {
                description: '',
                 diagonisic: diagnosic(id: 0, description: ''), 
              )),
-          ),       
+          )
+          :Container(),       
     );   
   }
   
@@ -74,6 +75,10 @@ class  _historyInfoScreenstate extends State<HistoryInfoScreen> {
  }
   
  void  _goDetail(Details details) async{
+  if(!widget.isAdmin)
+        {
+          return;
+        }
      String? result = await  Navigator.push(
       context, 
       MaterialPageRoute(
@@ -505,26 +510,26 @@ class  _historyInfoScreenstate extends State<HistoryInfoScreen> {
                             ),
                           ],
                         ),
-                        Positioned(
-                          bottom: 0,
-                  left: 280,
-                  child: InkWell(
-                    onTap: () => _goEditHistory(),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(30),
-                      child: Container(
-                        color: Colors.green[50],
-                        height: 40,
-                        width: 40,
-                        child: Icon(
-                          Icons.edit,
-                          size: 30,
-                          color: Colors.blue,
+                       widget.isAdmin? Positioned(
+                                bottom: 0,
+                                left: 280,
+                                child: InkWell(
+                                          onTap: () => _goEditHistory(),
+                                          child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(30),
+                                          child: Container(
+                                          color: Colors.green[50],
+                                          height: 40,
+                                          width: 40,
+                                          child: Icon(
+                                          Icons.edit,
+                                          size: 30,
+                                          color: Colors.blue,
                         ),
                       ),
                     ),
                   ) 
-                        ),
+                        ):Container(),
                 ],
               ),
 
@@ -594,7 +599,7 @@ class  _historyInfoScreenstate extends State<HistoryInfoScreen> {
                       ),
                     )
                   ), 
-                   Icon(Icons.arrow_forward_ios, size: 40,)               
+                 widget.isAdmin?  Icon(Icons.arrow_forward_ios, size: 40,)  :Container(),             
                 ],
               ),
             ),

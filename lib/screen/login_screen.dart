@@ -7,6 +7,7 @@ import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/constans.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/screen/home_screen.dart';
+import 'package:healthcare/screen/recovery_password_screen.dart';
 import 'package:healthcare/screen/register_user_screen.dart';
 import 'package:http/http.dart'as http;
 import 'package:connectivity/connectivity.dart';
@@ -44,7 +45,8 @@ class _loginScreenState extends State<loginScreen> {
                     _showemail(),
                     _showpassword(),
                     _showRememberMe(),
-                      _showButtons(),
+                    _showforgetPassword(),
+                    _showButtons(),                   
             ],
             ),
              ),        
@@ -276,6 +278,20 @@ Widget _showpassword() {
     context, 
    MaterialPageRoute(builder: (context)=> RegisterUserScreen())
     );
+ }
+ 
+ Widget _showforgetPassword() {
+  return InkWell(
+    onTap: ()=> _goForgetPassword(),
+    child: Container(
+      margin: EdgeInsets.only(bottom: 20),
+      child: Text('Forgot password ' , style: TextStyle(color: Colors.blue),),
+    ),
+  );
+ }
+ 
+ void _goForgetPassword() {
+  Navigator.push(context, MaterialPageRoute(builder: (context)=> RecoverPasswordScreen()));
  }
   
  

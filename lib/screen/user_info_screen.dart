@@ -18,11 +18,12 @@ import 'package:healthcare/screen/patient_info_screen.dart';
 import 'package:healthcare/screen/user_screen.dart';
 
 class UserInfoScreen extends StatefulWidget {
-   final Token token;
+  final Token token;
   final User user;
+  bool isAdmin;
  
 
-UserInfoScreen({required this.token, required this.user});
+UserInfoScreen({required this.token, required this.user , required this.isAdmin});
 
   @override
   _UserInfoScreenState createState() => _UserInfoScreenState();
@@ -390,7 +391,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
             context,
             MaterialPageRoute(
               builder: (context)=> PatientInfoScreen(
-                token: widget.token, user: _user, patient: e
+                token: widget.token, user: _user, patient: e, isAdmin: widget.isAdmin,
                 )
               )
             );

@@ -19,8 +19,8 @@ class PatientInfoScreen extends StatefulWidget {
   final Token token;
   final User user;
   final Patients patient;
-
-  PatientInfoScreen({required this.token , required this.user, required this.patient});
+  final bool isAdmin;
+  PatientInfoScreen({required this.token , required this.user, required this.patient, required this.isAdmin});
   
 
   @override
@@ -47,7 +47,8 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
           ? LoaderComponent(text: 'Loading...',) 
           : _getContent(),
       ),
-       floatingActionButton: FloatingActionButton(
+       floatingActionButton: widget.isAdmin
+       ? FloatingActionButton(
         child: Icon(Icons.add),
          onPressed: ()=> _goAddhistory(Histories(allergies: '',
           date: '',
@@ -61,7 +62,7 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
                           
          )),            
       ) 
-               
+        :Container()   
     ) ;   
   }
   
@@ -576,6 +577,7 @@ class _patientInfoScreen extends State<PatientInfoScreen> {
           user: widget.user, 
           patient:widget.patient,         
          history: history,
+         isAdmin: widget.isAdmin,
         ) 
       )
     );
