@@ -19,6 +19,8 @@ import 'package:healthcare/screen/login_screen.dart';
 import 'package:healthcare/screen/user_info_screen.dart';
 import 'package:healthcare/screen/user_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 class HomeScreen extends StatefulWidget {
  final Token token;
@@ -88,6 +90,47 @@ Widget _getBody() {
             
             ),
         ),
+        SizedBox(height: 10,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Llamar al taller'),
+              SizedBox(width: 10,),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  color: Colors.blue,
+                  child: IconButton(
+                    icon: Icon(Icons.call, color: Colors.white,),
+                    // ignore: deprecated_member_use
+                    onPressed: () => launch("tel://+9647804468010"), 
+                  ),
+                ),
+              )
+            ],
+          ),       
+          SizedBox(height: 10,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Enviar mensaje al taller'),
+              SizedBox(width: 10,),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Container(
+                  height: 40,
+                  width: 40,
+                  color: Colors.green,
+                  child: IconButton(
+                    icon: Icon(Icons.insert_comment, color: Colors.white,),
+                    onPressed: () => _sendMessage(), 
+                  ),
+                ),
+              )
+            ],
+          ),       
        ],
       ) 
     ),
@@ -288,4 +331,12 @@ Widget _getBody() {
             );     
         
  }
+ 
+  void _sendMessage() async{
+     final link = WhatsAppUnilink(
+      phoneNumber: '+9647804468010',
+      text: 'Hello ${widget.token.user.fullName} client caller',
+    );
+    await launch('$link');
+  }
 }
