@@ -15,6 +15,9 @@ import 'package:healthcare/screen/register_user_screen.dart';
 import 'package:http/http.dart'as http;
 import 'package:connectivity/connectivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+
 
 class loginScreen extends StatefulWidget {
   const loginScreen({Key? key}) : super(key: key);
@@ -138,7 +141,8 @@ Widget _showpassword() {
          _showRegisterButton(),       
          ],
         ),
-        _showGoogleLoginbutton()
+        _showGoogleLoginbutton(),
+        _showFacebookLoginButton(),
       ],
     ),
   );
@@ -328,10 +332,50 @@ Widget _showpassword() {
     );
   }
   
-  _loginGoogle() {
-    return Container(
-
+ void _loginGoogle() async{
+    setState(() {
+      _showLoader=false;
+    });
+    var googleSignIn=GoogleSignIn();
+    await googleSignIn.signOut();
+    var user=googleSignIn.signIn();
+    if(user==null)
+    {
+      setState(() {
+        _showLoader=false;
+      });
+    }
+    print(user);
+  }
+  
+ Widget _showFacebookLoginButton() {
+  return Row(
+      children: <Widget>[
+        Expanded(child: ElevatedButton.icon(
+          onPressed:()=> _loginFacebook(), 
+          icon:FaIcon(
+              FontAwesomeIcons.facebook,
+              color: Colors.blue,
+            ), 
+           label: Text("Login with Facebook"),
+           style: ElevatedButton.styleFrom(primary: Colors.white, onPrimary:Colors.black),
+          )),
+      ],
     );
+ }
+ 
+ void _loginFacebook() async{
+    await FacebookAuth.i.logOut();
+    var result= await FacebookAuth.i.login(
+      permissions: ["public_profile", "email"],
+    );
+    if(result.status==LoginStatus.success)
+    {
+      final requestdata=await FacebookAuth.i.getUserData(
+         fields: "email, name, picture.width(800).heigth(800), first_name, last_name",
+      );
+      print(requestdata);
+    }
   }
   
  
