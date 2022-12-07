@@ -33,7 +33,7 @@ class _takePictureScreen extends State<TakePictureScreen> {
      appBar: AppBar(title: Text('Take photo'),),
      body: FutureBuilder<void>(
       future: _initializeControllerFuture,
-      builder: (context, snapshot) {
+      builder: (context, snapshot) {          
           if (snapshot.connectionState == ConnectionState.done) {
             return CameraPreview(_controller);
           } else {

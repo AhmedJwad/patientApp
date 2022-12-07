@@ -55,8 +55,7 @@ class  _diagnosicscreenState extends State<diagnosicscreen> {
  Widget _showdescription() {
     return Container(
       padding: EdgeInsets.all(10),
-      child: TextField(
-        autofocus: true,
+      child: TextField(    
         controller: _descripitionController,
         keyboardType: TextInputType.multiline,
         decoration: InputDecoration(

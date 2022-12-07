@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
@@ -16,6 +18,8 @@ import 'package:flutter/material.dart';
 import 'package:healthcare/screen/Patient_Screen.dart';
 import 'package:healthcare/screen/patient_info_screen.dart';
 import 'package:healthcare/screen/user_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
 class UserInfoScreen extends StatefulWidget {
   final Token token;
@@ -175,7 +179,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                         ),
                                       ),
                                     ],
-                                  ),                                                                                  
+                                  ),
+                                  SizedBox(height: 5,),
+                                  widget.isAdmin ? _showCallButtons():Container(),
                                 ],
                               ),
                            ),
@@ -400,6 +406,48 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
               _getUser();
             }
  }
+ 
+ Widget _showCallButtons() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          height: 40,
+          width: 40,
+          color: Colors.blue,
+          child: IconButton(
+            icon: Icon(Icons.call, color: Colors.white,),
+            onPressed:()=>launch('tel://+${widget.user.phoneNumber}'), 
+           ),
+        ),
+      ),
+      SizedBox(width: 10,),
+      ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          height: 40,
+          width: 40,  
+          color: Colors.green, 
+          child: IconButton(
+            icon: Icon(Icons.insert_comment,color: Colors.white),
+            onPressed: ()=> _sendMessage(), 
+            
+            ),       
+        ),
+      ),
+    ],
+  );
+ }
+ 
+  void _sendMessage() async{
+     final link = WhatsAppUnilink(
+      phoneNumber: '+${widget.user.phoneNumber}',
+      text: 'Hello, I am writing to you from healthcare app.',
+    );
+    await launch('$link');  
+  }
  
     
   }    

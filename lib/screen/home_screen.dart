@@ -94,7 +94,7 @@ Widget _getBody() {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Llamar al taller'),
+              Text('call the doctor'),
               SizedBox(width: 10,),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
@@ -115,7 +115,7 @@ Widget _getBody() {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Enviar mensaje al taller'),
+              Text('Send message to the doctor'),
               SizedBox(width: 10,),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
@@ -337,6 +337,7 @@ Widget _getBody() {
       phoneNumber: '+9647804468010',
       text: 'Hello ${widget.token.user.fullName} client caller',
     );
+    // ignore: deprecated_member_use
     await launch('$link');
   }
 }

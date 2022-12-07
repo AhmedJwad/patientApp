@@ -1,0 +1,4 @@
+  keytool -genkey -v -keystore keys\key.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias Ahmednet380
+
+alias: Ahmednet380
+pass:  Ahmed@80

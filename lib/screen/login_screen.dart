@@ -1,8 +1,11 @@
 
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/constans.dart';
 import 'package:healthcare/models/token.dart';
@@ -124,37 +127,19 @@ Widget _showpassword() {
   return Container(    
     margin: EdgeInsets.only(left:10, right: 10,bottom: 10, top: 10),  
 
-    child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,           
-     children: <Widget>[  
-     Expanded(                 
-       child: ElevatedButton(
-       child:Text('Login'),
-       style: ButtonStyle(
-       backgroundColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState>states){
-            return Color(0xFF120E43);
-          }
-        )
+    child: Column(
+      children: [
+        Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,           
+         children: <Widget>[  
+           _showLoginButton(),
+        
+         SizedBox(width:20,),
+         _showRegisterButton(),       
+         ],
         ),
-        onPressed: ()=>_login()
-        ),
-     ),
-     SizedBox(width:20,),
-       Expanded(
-        child: ElevatedButton(
-        child:Text('Register'),
-        style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-            (Set<MaterialState> states) {
-              return Color(0xFFE03B8B);
-            }
-          ),
-        ),
-           onPressed: ()=>_register()
-           ),
-       ),
-     ],
+        _showGoogleLoginbutton()
+      ],
     ),
   );
  }
@@ -293,6 +278,63 @@ Widget _showpassword() {
  void _goForgetPassword() {
   Navigator.push(context, MaterialPageRoute(builder: (context)=> RecoverPasswordScreen()));
  }
+ 
+ Widget _showLoginButton() {
+  return  Expanded(                 
+       child: ElevatedButton(
+       child:Text('Login'),
+       style: ButtonStyle(
+       backgroundColor: MaterialStateProperty.resolveWith<Color>(
+          (Set<MaterialState>states){
+            return Color(0xFF120E43);
+          }
+        )
+        ),
+        onPressed: ()=>_login()
+        ),
+     );
+
+ }
+ 
+ Widget _showRegisterButton() {
+  return Expanded(
+        child: ElevatedButton(
+        child:Text('Register'),
+        style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              return Color(0xFFE03B8B);
+            }
+          ),
+        ),
+           onPressed: ()=>_register()
+           ),
+       );
+ }
+ 
+  Widget _showGoogleLoginbutton() {
+    return Row(
+      children: <Widget>[
+        Expanded(child: ElevatedButton.icon(
+          onPressed:()=> _loginGoogle(), 
+          icon:FaIcon(
+              FontAwesomeIcons.google,
+              color: Colors.red,
+            ), 
+           label: Text("Login with google"),
+           style: ElevatedButton.styleFrom(primary: Colors.white, onPrimary:Colors.black),
+          )),
+      ],
+    );
+  }
+  
+  _loginGoogle() {
+    return Container(
+
+    );
+  }
+  
+ 
   
  
  }
