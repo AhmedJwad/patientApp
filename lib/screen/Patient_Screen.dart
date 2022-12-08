@@ -559,20 +559,40 @@ Widget  _showButtons() {
 
     Future<Null>  _Takepicture() async{
       WidgetsFlutterBinding.ensureInitialized();
-              final camera= await availableCameras();
-              final firstcamera=camera.first;
-            Response? response= await  Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TakePictureScreen(camera:firstcamera,),
-              ),
-              );
-              if(response !=null)
-              {
-                setState(() {
-                 _photochanged=true;
-                  _image=response.result;
-                });
-              }    
+    final cameras = await availableCameras();
+    var camera = cameras.first;
+    var responseCamera = await showAlertDialog(
+        context: context,
+        title: 'select camera',
+        message: 'What camera do you want to use?',
+        actions: <AlertDialogAction>[
+          AlertDialogAction(key: 'front', label: 'front'),
+          AlertDialogAction(key: 'back', label: 'back'),
+          AlertDialogAction(key: 'cancel', label: 'cancel'),
+        ]);
+
+    if (responseCamera == 'cancel') {
+      return;
+    }
+
+    if (responseCamera == 'back') {
+      camera = cameras.first;
+    }
+
+    if (responseCamera == 'front') {
+      camera = cameras.last;
+    }
+
+    Response? response = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TakePictureScreen(camera: camera)));
+    if (response != null) {
+      setState(() {
+        _photochanged = true;
+        _image = response.result;
+      });
+    }
   }
   
    Future<Null>  _selectPicture()async {

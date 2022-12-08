@@ -214,6 +214,17 @@ Widget _getBody() {
             height: 2,
           ),
            ListTile(
+        leading: Icon(Icons.seven_k),
+        title: const Text('Healthcare on web'),
+        onTap: () =>launch("https://healthcareapi20220724094946.azurewebsites.net/"),
+        
+        ),        
+          
+         Divider(
+            color: Colors.black, 
+            height: 2,
+          ),
+           ListTile(
         leading: Icon(Icons.verified_user_outlined),
         title: const Text('Users'),
         onTap: () {

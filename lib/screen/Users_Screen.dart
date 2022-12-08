@@ -280,6 +280,7 @@ class  _usersSCeen extends State<UsersSCeen> {
           imageId:'',
           imageFullPath: '',
           userType: 1, 
+          loginType: 0,
           fullName: '',
           patients:[],         
           patientsCount: 0,

@@ -6,7 +6,8 @@ class User {
   String address='';
   String imageId='';
   String imageFullPath='';
-  int userType=0;
+  int userType = 0;
+  int loginType = 0;
   String fullName='';
   List<Patients> patients=[];  
   int patientsCount=0;  
@@ -24,6 +25,7 @@ class User {
       required this.imageId,
       required  this.imageFullPath,
       required this.userType,
+      required this.loginType,
       required this.fullName,
       required this.patients, 
       required this.patientsCount,
@@ -41,6 +43,7 @@ class User {
     imageId = json['imageId'];
     imageFullPath = json['imageFullPath'];
     userType = json['userType'];
+    loginType = json['loginType'];
     fullName = json['fullName'];    
     if (json['patients'] != null) {
       patients = [];
@@ -63,6 +66,7 @@ class User {
     data['imageId'] = this.imageId;
     data['imageFullPath'] = this.imageFullPath;
     data['userType'] = this.userType;
+    data['loginType'] = this.loginType;
     data['fullName'] = this.fullName;
     data['patients'] = this.patients.map((v) => v.toJson()).toList();   
     data['patientsCount'] = this.patientsCount;   

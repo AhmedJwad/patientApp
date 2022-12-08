@@ -601,24 +601,54 @@ void  _save() {
            }
            
             void  _Takepicture() async{
-              WidgetsFlutterBinding.ensureInitialized();
-              final camera= await availableCameras();
-              final firstcamera=camera.first;
-            Response? response= await  Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TakePictureScreen(camera:firstcamera,),
-              ),
-              );
-              if(response !=null)
+              if(widget.user.loginType !=0)
               {
-                setState(() {
-                  _photoChanged=true;
-                  _image=response.result;
-                });
+                _validateUserSocial();
+                return;
               }
+               WidgetsFlutterBinding.ensureInitialized();
+              final cameras = await availableCameras();
+              var camera = cameras.first;
+              var responseCamera = await showAlertDialog(
+                  context: context,
+                  title: 'select camera',
+                  message: 'What camera do you want to use?',
+                  actions: <AlertDialogAction>[
+                    AlertDialogAction(key: 'front', label: 'front'),
+                    AlertDialogAction(key: 'back', label: 'back'),
+                    AlertDialogAction(key: 'cancel', label: 'cancel'),
+                  ]);
+
+                      if (responseCamera == 'cancel') {
+                        return;
+                      }
+
+                      if (responseCamera == 'back') {
+                        camera = cameras.first;
+                      }
+
+                      if (responseCamera == 'front') {
+                        camera = cameras.last;
+                      }
+
+                      Response? response = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => TakePictureScreen(camera: camera)));
+                      if (response != null) {
+                        setState(() {
+                          _photoChanged = true;
+                          _image = response.result;
+                        });
+                 }
             }
             
              void _selectPicture() async{
+             if(widget.user.loginType !=0)
+                {
+                  _validateUserSocial();
+                  return;
+                }
               final ImagePicker _picker= ImagePicker();
               final XFile? image= await _picker.pickImage(source: ImageSource.gallery);
               if(image !=null)
@@ -631,6 +661,11 @@ void  _save() {
              }
      
    void _changePassword() {
+     if(widget.user.loginType !=0)
+                {
+                  _validateUserSocial();
+                  return;
+                }
        Navigator.push(
       context, 
       MaterialPageRoute(
@@ -640,5 +675,16 @@ void  _save() {
       )
     );   
        
-     }  
+     }
+     
+       void _validateUserSocial() async{
+        await showAlertDialog(
+        context: context,
+        title: 'Error', 
+        message: 'You must perform this operation through the social network with which you logged in.',
+        actions: <AlertDialogAction>[
+            AlertDialogAction(key: null, label: 'Accept'),
+        ]
+      );            
+       }  
   }

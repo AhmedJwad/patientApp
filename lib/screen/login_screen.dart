@@ -2,6 +2,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
@@ -9,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/constans.dart';
 import 'package:healthcare/models/token.dart';
+import 'package:healthcare/models/user.dart';
 import 'package:healthcare/screen/home_screen.dart';
 import 'package:healthcare/screen/recovery_password_screen.dart';
 import 'package:healthcare/screen/register_user_screen.dart';
@@ -334,18 +336,40 @@ Widget _showpassword() {
   
  void _loginGoogle() async{
     setState(() {
-      _showLoader=false;
+      _showLoader=true;
     });
-    var googleSignIn=GoogleSignIn();
+    var googleSignIn=GoogleSignIn();   
+     await googleSignIn.signIn().catchError((onError) {
+          print("Error $onError");
+           return null;
+        });
     await googleSignIn.signOut();
-    var user=googleSignIn.signIn();
+    
+    var user=await googleSignIn.signIn();
     if(user==null)
     {
       setState(() {
         _showLoader=false;
       });
+    
+    await showAlertDialog(
+        context: context,
+        title: 'Error',
+        message: 'There was a problem getting the Google username, please try again later.',
+        actions: <AlertDialogAction>[
+            AlertDialogAction(key: null, label: 'Accept'),
+        ]
+      );    
+      return;
     }
-    print(user);
+    Map<String , dynamic> request={
+      'email':user.email,
+      'id':user.id,
+      'loginType':1,
+      'photoURL':user.photoUrl,
+      'fullName':user.displayName,
+    };
+      await _socialLogin(request);
   }
   
  Widget _showFacebookLoginButton() {
@@ -365,18 +389,93 @@ Widget _showpassword() {
  }
  
  void _loginFacebook() async{
+  setState(() {
+      _showLoader=true;
+    });
     await FacebookAuth.i.logOut();
     var result= await FacebookAuth.i.login(
       permissions: ["public_profile", "email"],
     );
-    if(result.status==LoginStatus.success)
+    if(result.status!=LoginStatus.success)
     {
-      final requestdata=await FacebookAuth.i.getUserData(
-         fields: "email, name, picture.width(800).heigth(800), first_name, last_name",
-      );
-      print(requestdata);
+      setState(() {
+        _showLoader = false;
+      });
+ 
+      await showAlertDialog(
+        context: context,
+        title: 'Error',
+        message: 'There was a problem getting the Facebook username, please try again later.',
+        actions: <AlertDialogAction>[
+            AlertDialogAction(key: null, label: 'Accept'),
+        ]
+      );    
+      return;
     }
+    final requestData = await FacebookAuth.i.getUserData(
+      fields: "email, name, picture.width(800).heigth(800), first_name, last_name",
+    );
+
+    var picture = requestData['picture'];
+    var data = picture['data'];
+
+    Map<String, dynamic> request = {
+      'email': requestData['email'],
+      'id': requestData['id'],
+      'loginType': 2,
+      'fullName': requestData['name'],
+      'photoURL': data['url'],
+      'firtsName': requestData['first_name'],
+      'lastName': requestData['last_name'],
+    };
+
+    await _socialLogin(request);
   }
+  
+ Future  _socialLogin(Map<String, dynamic> request) async{
+  setState(() {
+      _showLoader=true;
+    });
+   var url = Uri.parse('${constans.apiUrl}/api/Account/SocialLogin');
+   var bodyRequest=jsonEncode(request);
+   var response = await http.post(
+      url,
+      headers: {
+        'content-type' : 'application/json',
+        'accept' : 'application/json',
+      },
+      body: bodyRequest,
+    );
+   setState(() {
+     _showLoader=false;
+   });
+   if(response.statusCode >= 400)
+   {
+    await showAlertDialog(
+        context: context,
+        title: 'Error', 
+        message: 'The user has already logged in previously by email or another social network..',
+        actions: <AlertDialogAction>[
+            AlertDialogAction(key: null, label: 'Accept'),
+        ]
+      );   
+      return; 
+   }
+   var body=response.body;
+
+   if(_rememberMe)
+   {
+    _storeUser(body);
+   }
+   var decodejson=jsonDecode(body);
+   var token=Token.fromJson(decodejson);
+    Navigator.pushReplacement(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(token: token,)
+      )
+    );
+ }
   
  
   
