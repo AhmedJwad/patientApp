@@ -338,6 +338,24 @@ Widget _showpassword() {
     setState(() {
       _showLoader=true;
     });
+     var connectivityResult= await Connectivity().checkConnectivity();
+  
+  if(connectivityResult == ConnectivityResult.none )
+  {
+    setState(() {
+    _showLoader=false;
+  });
+    await showAlertDialog(
+      context: context, 
+      title:'Error',  
+      message: 'check your internet connection.',    
+     actions: <AlertDialogAction>[
+      AlertDialogAction(key: null, label:'Accept')
+     ]
+         );
+      return ;
+      
+  }
     var googleSignIn=GoogleSignIn();   
      await googleSignIn.signIn().catchError((onError) {
           print("Error $onError");

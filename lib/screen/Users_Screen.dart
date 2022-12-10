@@ -243,7 +243,7 @@ class  _usersSCeen extends State<UsersSCeen> {
                                 ),  
                                 SizedBox(height: 5,), 
                                 Text(
-                                  e.phoneNumber, 
+                                  '+${e.countryCode}${e.phoneNumber}', 
                                   style: TextStyle(
                                     fontSize: 15,
                                   ),
@@ -287,7 +287,8 @@ class  _usersSCeen extends State<UsersSCeen> {
           id: '',
           userName: '',
           email: '',
-          phoneNumber: ''
+          phoneNumber: '',
+          countryCode: '964',
          ),
         )
       )

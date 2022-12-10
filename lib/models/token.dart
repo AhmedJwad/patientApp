@@ -4,7 +4,8 @@ class Token {
   String token='';
   String expiration='';
   User user=User(firstName: '', lastName: '', address: '', imageId: '',
-   imageFullPath: '', userType:0,loginType: 0, fullName: '', id: '', userName: '', email: '', phoneNumber: '', patients: [],patientsCount:0);
+   imageFullPath: '', userType:0,loginType: 0, fullName: '', id: '',
+    userName: '', email: '', phoneNumber: '', countryCode: '964', patients: [],patientsCount:0);
 
   Token({required this.token, required this.expiration,required this.user});
 

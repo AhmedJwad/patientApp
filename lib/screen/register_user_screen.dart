@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
 import 'package:camera/camera.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:healthcare/components/loader_component.dart';
@@ -27,6 +28,9 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
   bool _photoChanged = false;
 
   late XFile _image;
+
+   String _countryName = 'Iraq (Iq)';
+  String _countryCode = '964';
 
   String _firsName = '';
   String _firsNameError = '';
@@ -94,7 +98,8 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
               _showfirstName(), 
               _showlastName(),  
               _showEmail(),
-              _showAddress(),             
+              _showAddress(),  
+              _showCountry(),           
               _showPhoneNumber(),
               _showRolesId(),              
               _showPassword(),
@@ -569,7 +574,8 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
       'lastName': _lastName,
       'roleId': _roleId,     
       'email': _email,      
-      'address': _address,     
+      'address': _address,   
+      'countryCode': _countryCode,  
       'phoneNumber': _phoneNumber,
       'image': base64image,
       'password': _password,
@@ -606,6 +612,38 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
 
     Navigator.pop(context, 'yes');
   }
+  
+ Widget _showCountry() {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 10),
+    child: Row(
+      children: <Widget>[
+        ElevatedButton(
+          child:Text("Country code"),
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState>States){
+            return Color(0xFFE03B8B);
+          }),
+          ),
+          onPressed: ()=> _selectCountry(),      
+        ),
+        SizedBox(width: 10,),
+        Text('$_countryCode $_countryName')
+      ],
+    ),
+  );
+ }
+ 
+ void _selectCountry() {
+  showCountryPicker(
+    context: context,
+     onSelect: ((Country country){
+      setState(() {
+        _countryName=country.displayNameNoCountryCode;
+        _countryCode=country.phoneCode;
+      });
+     })
+     );
+ }
    
   
 

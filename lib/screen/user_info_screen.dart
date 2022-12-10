@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:healthcare/components/loader_component.dart';
 import 'package:healthcare/helpers/api_helper.dart';
+import 'package:healthcare/helpers/regex_helper.dart';
 import 'package:healthcare/models/City.dart';
 import 'package:healthcare/models/Nationality.dart';
 import 'package:healthcare/models/UserPatient.dart';
@@ -149,7 +150,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                     children: <Widget>[
                                        Text('Phone Number :', style: TextStyle(fontWeight: FontWeight.bold),),
                                       Text(
-                                        _user.phoneNumber, 
+                                       '+${_user.countryCode}''${_user.phoneNumber}', 
                                         style: TextStyle(
                                           fontSize: 15,
                                         ),
@@ -419,7 +420,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           color: Colors.blue,
           child: IconButton(
             icon: Icon(Icons.call, color: Colors.white,),
-            onPressed:()=>launch('tel://+${widget.user.phoneNumber}'), 
+            onPressed:()=>launch('tel://+${widget.user.phoneNumber}''${RegexHelper.removeBlankSpaces(widget.user.phoneNumber)}'), 
            ),
         ),
       ),
@@ -443,7 +444,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
  
   void _sendMessage() async{
      final link = WhatsAppUnilink(
-      phoneNumber: '+${widget.user.phoneNumber}',
+      phoneNumber: '+${widget.user.countryCode}${RegexHelper.removeBlankSpaces(widget.user.phoneNumber)}',
       text: 'Hello, I am writing to you from healthcare app.',
     );
     await launch('$link');  
