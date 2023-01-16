@@ -83,116 +83,118 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   }
   
  Widget _showUserinfo() {
-    return  Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(5),
-                child: Row(               
-                  children: [
-                   Stack(
-                    children: <Widget>[
-                    ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: CachedNetworkImage(
-                            imageUrl: _user.imageFullPath,
-                            errorWidget: (context, url, error) => Icon(Icons.error),
-                            fit: BoxFit.cover,
-                            height: 100,
-                            width: 100,
-                            placeholder: (context, url) => Image(
-                              image: AssetImage('assets/noimage.png'),
+    return  SingleChildScrollView(
+      child: Container(
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(5),
+                  child: Row(               
+                    children: [
+                     Stack(
+                      children: <Widget>[
+                      ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: CachedNetworkImage(
+                              imageUrl: _user.imageFullPath,
+                              errorWidget: (context, url, error) => Icon(Icons.error),
                               fit: BoxFit.cover,
                               height: 100,
                               width: 100,
-                            ),
-                          ),
-                        ),
-                       Positioned(
-                          bottom: 0,
-                          left: 60,
-                          child: InkWell(
-                            onTap: ()=>_goEdit(),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: Container(
-                                color: Colors.green[50],
-                                height: 40,
-                                width: 40,
-                                child: Icon(Icons.edit, size: 30, color: Colors.blue,),
+                              placeholder: (context, url) => Image(
+                                image: AssetImage('assets/noimage.png'),
+                                fit: BoxFit.cover,
+                                height: 100,
+                                width: 100,
                               ),
                             ),
                           ),
-                          ),
-                      ],
-                    ),                    
-                  Expanded(
-                     child:Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                       child: Row(
-                         mainAxisAlignment: MainAxisAlignment.start,   
-                         children: [
-                           Expanded(
-                             child: Column(  
-                              mainAxisAlignment: MainAxisAlignment.start,                                      
-                                children:<Widget> [                              
-                                  Row(
-                                    children:<Widget> [
-                                      Text('Email :', style: TextStyle(fontWeight: FontWeight.bold),),
-                                      Text(
-                                        _user.email, 
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),  
-                                  SizedBox(height: 5,), 
-                                  Row(
-                                    children: <Widget>[
-                                       Text('Phone Number :', style: TextStyle(fontWeight: FontWeight.bold),),
-                                      Text(
-                                       '+${_user.countryCode}''${_user.phoneNumber}', 
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),       
-                                   SizedBox(height: 5,), 
-                                  Row(
-                                    children: <Widget>[
-                                       Text('Address :', style: TextStyle(fontWeight: FontWeight.bold),),
-                                      Text(
-                                        _user.address, 
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),    
-                                   SizedBox(height: 5,), 
-                                  Row(
-                                    children: <Widget>[
-                                       Text('#Patients :', style: TextStyle(fontWeight: FontWeight.bold),),
-                                      Text(
-                                        _user.patientsCount.toString(), 
-                                        style: TextStyle(
-                                          fontSize: 15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 5,),
-                                  widget.isAdmin ? _showCallButtons():Container(),
-                                ],
+                         Positioned(
+                            bottom: 0,
+                            left: 60,
+                            child: InkWell(
+                              onTap: ()=>_goEdit(),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: Container(
+                                  color: Colors.green[50],
+                                  height: 40,
+                                  width: 40,
+                                  child: Icon(Icons.edit, size: 30, color: Colors.blue,),
+                                ),
                               ),
-                           ),
-                         ],
-                       ),                       
-                     ),
-                   ),                       
-                  ],
+                            ),
+                            ),
+                        ],
+                      ),                    
+                    Expanded(
+                       child:Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                         child: Row(
+                           mainAxisAlignment: MainAxisAlignment.start,   
+                           children: [
+                             Expanded(
+                               child: Column(  
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,                                      
+                                  children:<Widget> [                              
+                                    Row(
+                                      children:<Widget> [
+                                        Text('Email :', style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text(
+                                          _user.email, 
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),  
+                                    SizedBox(height: 5,), 
+                                    Row(
+                                      children: <Widget>[
+                                         Flexible(child: Text('Phone Number:', style: TextStyle(fontWeight: FontWeight.bold),)),
+                                        Text(
+                                         '+${_user.countryCode}''${_user.phoneNumber}', 
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),       
+                                     SizedBox(height: 5,), 
+                                    Row(
+                                      children: <Widget>[
+                                         Text('Address :', style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text(
+                                          _user.address, 
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),    
+                                     SizedBox(height: 5,), 
+                                    Row(
+                                      children: <Widget>[
+                                         Text('#Patients :', style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text(
+                                          _user.patientsCount.toString(), 
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5,),
+                                    widget.isAdmin ? _showCallButtons():Container(),
+                                  ],
+                                ),
+                             ),
+                           ],
+                         ),                       
+                       ),
+                     ),                       
+                    ],
+                  ),
                 ),
-              );
+    );
   }
   
  
@@ -328,7 +330,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                     Text(
                                       e.fullName,
                                       style: TextStyle(
-                                        fontSize: 20,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold
                                       ),                                  
                                     ),                                                              
@@ -342,17 +344,22 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                           style: TextStyle(
                                             fontSize: 14,
                                           ),
-                                        ),
-                                        SizedBox(width: 5,),
-                                        Text("Age:"),
+                                        ),                           
+                                                           
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                         Text("Age:"),
                                           SizedBox(width: 5,),
                                         Text(
                                           e.age.toString(),
                                           style: TextStyle(
                                             fontSize: 14,
                                           ),
-                                        ),                                   
+                                        ),               
                                       ],
+
                                     ),
                                       Row(
                                       children: [
@@ -365,7 +372,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                             fontSize: 14,
                                           ),
                                         ),
-                                        SizedBox(width: 5,),
+                                       
+                                                            
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
                                         Text("Blood Type:"),
                                           SizedBox(width: 5,),
                                         Text(
@@ -373,7 +385,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                           style: TextStyle(
                                             fontSize: 14,
                                           ),
-                                        ),                                   
+                                        ),               
                                       ],
                                     ),
                                   ],
