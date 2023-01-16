@@ -16,12 +16,13 @@ import 'package:healthcare/screen/Users_Screen.dart';
 import 'package:healthcare/screen/bloodtype_Screen.dart';
 import 'package:healthcare/screen/diagnosic_screen.dart';
 import 'package:healthcare/screen/login_screen.dart';
+import 'package:healthcare/screen/mumdeical_history_screen.dart';
 import 'package:healthcare/screen/user_info_screen.dart';
 import 'package:healthcare/screen/user_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
-
+import '../helpers/regex_helper.dart';
 class HomeScreen extends StatefulWidget {
  final Token token;
  
@@ -46,7 +47,9 @@ class  _homescreenState extends State<HomeScreen> {
       title: Text('patients' , ),
      ),
      body: _getBody(),
-     drawer:widget.token.user.userType==0? _getAdminMenue() :_getuserMenue(),
+     drawer:widget.token.user.userType==0? _getAdminMenue() : widget.token.user.userType ==1 
+    ? _getuserMenue()
+    : _getpatientMenue(),
     );
   }
   
@@ -94,7 +97,8 @@ Widget _getBody() {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('call the doctor'),
+             widget.token.user.userType==0? Text('call the Admin'):widget.token.user.userType==1?Text('call the doctor')
+             :Text('call the Patient'),
               SizedBox(width: 10,),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
@@ -105,7 +109,7 @@ Widget _getBody() {
                   child: IconButton(
                     icon: Icon(Icons.call, color: Colors.white,),
                     // ignore: deprecated_member_use
-                    onPressed: () => launch("tel://+9647804468010"), 
+                    onPressed: () => launch('tel://+${widget.token.user.phoneNumber}''${RegexHelper.removeBlankSpaces(widget.token.user.phoneNumber)}'), 
                   ),
                 ),
               )
@@ -115,7 +119,8 @@ Widget _getBody() {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Send message to the doctor'),
+               widget.token.user.userType==0? Text('Send message to the Admin'):widget.token.user.userType==1?Text('Send message to the doctor')
+             :Text('Send message to the Patient'),
               SizedBox(width: 10,),
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
@@ -351,4 +356,60 @@ Widget _getBody() {
     // ignore: deprecated_member_use
     await launch('$link');
   }
+  
+Widget  _getpatientMenue() {
+   return Drawer(
+    child: ListView(
+     padding: EdgeInsets.zero,
+     children: <Widget>[
+      DrawerHeader(
+        child: Image(
+          image: AssetImage('assets/logo.jpg'), width: 400,
+          )
+        ),
+     ListTile(
+        leading: Icon(Icons.sick),
+        title: const Text('My Medical History'),
+        onTap: () { 
+           Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) =>MyMedicalScreen(token: widget.token,                  
+                    user: widget.token.user,                   
+                    )
+                  )
+                 );         
+        },
+        ),
+       
+          
+         Divider(
+            color: Colors.black, 
+            height: 2,
+          ),
+            ListTile(
+        leading: Icon(Icons.supervised_user_circle_sharp),
+        title: const Text('Edit Profile'),
+        onTap: () {
+                    Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) =>UserScreen(token: widget.token,                  
+                    user: widget.token.user,
+                     myProfile: true,
+                    )
+                  )
+                 );
+        },
+        ),
+         ListTile(
+        leading: Icon(Icons.login_outlined),
+        title: const Text('Log out'),
+        onTap: ()=>_logOut()
+          
+        ),
+     ],
+    ),
+  );  
+}
 }
