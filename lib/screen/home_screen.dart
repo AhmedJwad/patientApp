@@ -17,6 +17,7 @@ import 'package:healthcare/screen/bloodtype_Screen.dart';
 import 'package:healthcare/screen/diagnosic_screen.dart';
 import 'package:healthcare/screen/login_screen.dart';
 import 'package:healthcare/screen/mumdeical_history_screen.dart';
+import 'package:healthcare/screen/myAgenda_Screen.dart';
 import 'package:healthcare/screen/user_info_screen.dart';
 import 'package:healthcare/screen/user_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -382,7 +383,21 @@ Widget  _getpatientMenue() {
         },
         ),
        
-          
+        ListTile(
+        leading: Icon(Icons.sick),
+        title: const Text('My Agenda'),
+        onTap: () { 
+           Navigator.push(
+                  context, 
+                  MaterialPageRoute(
+                  builder: (context) =>MyAgendaScreen(token: widget.token,                  
+                    user: widget.token.user,                   
+                    )
+                  )
+                 );         
+        },
+        ),
+       
          Divider(
             color: Colors.black, 
             height: 2,

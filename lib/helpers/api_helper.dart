@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:healthcare/models/Agenda.dart';
 import 'package:healthcare/models/City.dart';
 import 'package:healthcare/models/Diagnosic.dart';
 import 'package:healthcare/models/Nationality.dart';
@@ -64,7 +65,36 @@ static Future<Response> getPatient(Token token, String id) async {
       var decodedJson = jsonDecode(body);
       return Response(isSuccess: true, result: Patients.fromJson(decodedJson));
   }
+static Future<Response> GetAgenda(Token token, String id)async  {
+          if (!_validToken(token)) {
+            return Response(isSuccess: false, message: 'Your credentials have expired, please log out and log back in.');
+          }
+          var url=Uri.parse('${constans.apiUrl}/api/Agenda/$id');
+          var response=await http.get(
+          url, 
+              headers: {
+              'content-type' : 'application/json',
+              'accept' : 'application/json',
+              'authorization':'bearer ${token.token}' ,
+                } , 
+        );    
+          var body=response.body;
+        if(response.statusCode >= 400)
+        {
+          return Response(isSuccess: false, result:body);
+        }
+        List<Agenda> list=[] ;  
+        var decodedjson=jsonDecode(body);
+        if(decodedjson != null)
+        {
+          for (var item in decodedjson) {
+            list.add(Agenda.fromJson(item));
+          }
+        }
+          return Response(isSuccess: true, result: list);
+    }  
 
+     
 
 static Future<Response> GetUsers(Token token)async  {
           if (!_validToken(token)) {
