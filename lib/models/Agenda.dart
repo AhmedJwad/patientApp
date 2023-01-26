@@ -6,9 +6,9 @@ class Agenda {
   int id=0;
   String date='';
   String? description;
-  bool? isAvailable;
-  bool? isMine=false;
-  String? dateLocal;
+  bool isAvailable=true;
+  bool isMine=false;
+  String dateLocal='';
   Patientresponse? patientresponse= Patientresponse(
   id: 0, 
   firstName: '', 
@@ -19,24 +19,21 @@ class Agenda {
   epcnNumber: 0, 
   mobilePhone: '', 
   description: '', 
-  age: 0, 
-  patientPhotosCount: 0, 
-  fullName: '', 
-  imageFullPath: '',   
+  email: '',   
 );
-  UserResponse? userResponse= UserResponse(firstName: '', lastName: '', address: '', imageId: '',
-   imageFullPath: '', userType: 0, loginType: 0, fullName: '', id: '', userName: '', email: '', phoneNumber:'', 
+  UserResponse userResponse= UserResponse(firstName: '', lastName: '', address: '', imageId: '',
+   imageFullPath: '',  fullName: '', id: '', email: '', phoneNumber:'', 
    countryCode: '');
 
   Agenda(
       {required this.id,
       required this.date,
       this.description,
-      this.isAvailable,
-      this.isMine,
-      this.dateLocal,
+     required this.isAvailable,
+     required this.isMine,
+     required this.dateLocal,
       this.patientresponse,
-      this.userResponse});
+    required  this.userResponse});
 
   Agenda.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -48,10 +45,9 @@ class Agenda {
    patientresponse = json['patientresponse'] != null
         ? new Patientresponse.fromJson(json['patientresponse'])
         : null;
-    userResponse = json['userResponse'] != null
-        ? new UserResponse.fromJson(json['userResponse'])
-        : null;       
-        
+   
+    userResponse= UserResponse.fromJson(json['userResponse']);
+      
   }
 
   Map<String, dynamic> toJson() {
@@ -64,10 +60,9 @@ class Agenda {
     data['dateLocal'] = this.dateLocal;  
       if (this.patientresponse != null) {
       data['patientresponse'] = this.patientresponse!.toJson();
-    }
-    if (this.userResponse != null) {
-      data['userResponse'] = this.userResponse!.toJson();
-    }
+    } 
+    data['userResponse'] = this.userResponse.toJson();
+   
    
     return data;
   }

@@ -8,10 +8,7 @@ class Patientresponse {
   int epcnNumber=0;
   String mobilePhone='';
   String description='';
-  int age=0;
-  int patientPhotosCount=0;
-  String fullName='';
-  String imageFullPath='';
+  String email='';
 
   Patientresponse(
       {required this.id,
@@ -23,10 +20,7 @@ class Patientresponse {
        required this.epcnNumber,
        required this.mobilePhone,
        required this.description,
-       required this.age,
-       required this.patientPhotosCount,
-       required this.fullName,
-       required this.imageFullPath,});
+      required this .email});
 
   Patientresponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -38,10 +32,7 @@ class Patientresponse {
     epcnNumber = json['epcnNumber'];
     mobilePhone = json['mobilePhone'];
     description = json['description'];
-    age = json['age'];
-    patientPhotosCount = json['patientPhotosCount'];
-    fullName = json['fullName'];
-    imageFullPath = json['imageFullPath'];
+    email=json['email'];
   }
 
   Map<String, dynamic> toJson() {
@@ -55,10 +46,7 @@ class Patientresponse {
     data['epcnNumber'] = this.epcnNumber;
     data['mobilePhone'] = this.mobilePhone;
     data['description'] = this.description;
-    data['age'] = this.age;
-    data['patientPhotosCount'] = this.patientPhotosCount;
-    data['fullName'] = this.fullName;
-    data['imageFullPath'] = this.imageFullPath;
+    data['email'] = this.email;    
     return data;
   }
 }

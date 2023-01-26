@@ -1,68 +1,52 @@
 class UserResponse {
- String firstName='';
+  String id='';
+  String email='';
+  String firstName='';
   String lastName='';
+  String countryCode='';
   String address='';
   String imageId='';
   String imageFullPath='';
-  int userType = 0;
-  int loginType = 0;
   String fullName='';
-  String id='';
-  String? userName;  
-  String email='';  
-  String? phoneNumber;
-  String countryCode='';
-  
-  
+  String phoneNumber='';
 
- UserResponse(
-      {required this.firstName,
-      required this.lastName,
-      required  this.address,
-      required this.imageId,
-      required  this.imageFullPath,
-      required this.userType,
-      required this.loginType,
-      required this.fullName,    
-      required this.id,
-      this.userName,      
-      required this.email,      
-      this.phoneNumber,
-      required this.countryCode,
-      });
-      
+  UserResponse(
+      {required this.id,
+     required this.email,
+     required this.firstName,
+     required this.lastName,
+     required this.countryCode,
+     required this.address,
+     required this.imageId,
+     required this.imageFullPath,
+     required this.fullName,
+     required this.phoneNumber});
 
   UserResponse.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    email = json['email'];
     firstName = json['firstName'];
     lastName = json['lastName'];
+    countryCode = json['countryCode'];
     address = json['address'];
     imageId = json['imageId'];
     imageFullPath = json['imageFullPath'];
-    userType = json['userType'];
-    loginType = json['loginType'];
-    fullName = json['fullName'];       
-    id = json['id'];
-    userName = json['userName'];    
-    email = json['email'];    
-    phoneNumber = json['phoneNumber']; 
-    countryCode = json['countryCode'];    
+    fullName = json['fullName'];
+    phoneNumber = json['phoneNumber'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['email'] = this.email;
     data['firstName'] = this.firstName;
     data['lastName'] = this.lastName;
+    data['countryCode'] = this.countryCode;
     data['address'] = this.address;
     data['imageId'] = this.imageId;
     data['imageFullPath'] = this.imageFullPath;
-    data['userType'] = this.userType;
-    data['loginType'] = this.loginType;
-    data['fullName'] = this.fullName;   
-    data['id'] = this.id;
-    data['userName'] = this.userName;    
-    data['email'] = this.email;    
-    data['phoneNumber'] = this.phoneNumber;  
-    data['countryCode'] = this.countryCode;  
+    data['fullName'] = this.fullName;
+    data['phoneNumber'] = this.phoneNumber;
     return data;
   }
 }

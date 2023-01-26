@@ -8,6 +8,7 @@ import 'package:healthcare/models/Agenda.dart';
 import 'package:healthcare/models/response.dart';
 import 'package:healthcare/models/token.dart';
 import 'package:healthcare/models/user.dart';
+import 'package:healthcare/screen/Agenda_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
@@ -110,7 +111,7 @@ Future<Null>_getAgenda() async{
                               );    
                               return;
                             }
-        Response response=await Apihelper.getUser(widget.token , _user.id);
+        Response response=await Apihelper.getUserpatient(widget.token , _user.id);
 
         setState(() {
           _showLoader=false;
@@ -133,9 +134,15 @@ Future<Null>_getAgenda() async{
    }
    
    Widget  _getContent() {
-       return _agenda.length == 0 
-      ? _noContent()
-      : _getListView();  
+    
+        return Column(
+                children: <Widget>[
+                  _showUserinfo(),
+                  Expanded(
+                    child: _agenda.length == 0 ? _noContent() : _getListView(),
+                  ),
+                ],
+              ); 
    }
    
    Widget  _showUserinfo() {
@@ -288,7 +295,7 @@ Future<Null>_getAgenda() async{
       child: Container(
         margin: EdgeInsets.all(20),
         child: Text(         
-           'There are no registered users.',
+           'There are no Agenda added by doctors.',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold
@@ -304,7 +311,7 @@ Future<Null>_getAgenda() async{
         children: _agenda.map((e) {
           return Card(
             child: InkWell(
-              onTap: () =>{} ,//_goInfoUser(e),
+              onTap: () =>e.isAvailable? AddAgenda(e):_delteagenda(e),
               child: Container(
                 margin: EdgeInsets.all(10),
                 padding: EdgeInsets.all(5),
@@ -326,28 +333,44 @@ Future<Null>_getAgenda() async{
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),    
-                                SizedBox(height: 5,),
-                               
-                                 Text(                                  
-                                  e.isAvailable!? "yse":'No', 
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),  
+                               Row(
+                                      children: [
+                                        Text('Available:'                                    
+                                        ),
+                                        SizedBox(width: 5,),
+                                        Text(                                  
+                                            e.isAvailable? "yse":'No', 
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                            ),
+                                          ),                         
+                                                         
+                                      ],
+                                    ),
+                                
                                 SizedBox(height: 5,), 
-                                Text(
-                                 e.description.toString(), 
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                  ),
-                                ),                                         
+                                   Row(
+                                      children: [
+                                        Text('description:'                                    
+                                        ),
+                                        SizedBox(width: 5,),
+                                        Text(
+                                          e.description.toString(), 
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                            ),
+                                          ),                               
+                                                        
+                                      ],
+                                    ),
+                                                                
                               ],
                             ),
                          ],
                        ),
                      ),
                    ),    
-                      Icon(Icons.add),              
+                     e.isAvailable ? Icon(Icons.add, color: Color.fromARGB(255, 31, 143, 200),):Icon(Icons.delete, color: Color(0xffF02E65),),              
                   ],
                 ),
               ),
@@ -357,6 +380,29 @@ Future<Null>_getAgenda() async{
       ),
     );
  }
+ 
+ void _delteagenda(Agenda e) {
+ 
+ }
+  
+ void AddAgenda(Agenda e) async{
+   String? result = await  Navigator.push(
+      context, 
+      MaterialPageRoute(
+        builder: (context) =>AgendaScrren(
+          token: widget.token, 
+          user: _user, 
+          patient:_user.patients.first,  
+          agenda: e,       
+        
+        ) 
+      )
+    );
+    if (result == 'yes') {
+      await _getAgenda();     
+    }    
+ }
+ 
  
     
   }

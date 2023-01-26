@@ -31,7 +31,7 @@ class _MyMedicalScreenState extends State<MyMedicalScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _user=widget.user;
+    _user=widget.user;    
     _getUser();
   }
   Widget build(BuildContext context) {
