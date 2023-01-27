@@ -36,7 +36,7 @@ class _agendaScrrenState extends State<AgendaScrren> {
   void initState() {
     // TODO: implement initState
     super.initState();   
-     _getUser(); 
+     //_getUser(); 
     _user=widget.user;
     widget.patient.id==_user.patients.map((e) => e.id);
    
@@ -137,7 +137,9 @@ Widget  _showDescription() {
    _addRecord();
  }
   
-  _cancel() {}
+void  _cancel() {
+   Navigator.pop(context, 'yes');
+}
   
   bool validateFields() {
       bool isValid=true;

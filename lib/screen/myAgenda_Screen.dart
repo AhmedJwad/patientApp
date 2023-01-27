@@ -70,7 +70,7 @@ Future<Null>_getAgenda() async{
       return ;
       
   }
-    Response response = await Apihelper.GetAgenda(widget.token, _user.id);
+    Response response = await Apihelper.GetAgenda(widget.token,widget.user.id);
 
     setState(() {
       _showLoader = false;
@@ -332,7 +332,8 @@ Future<Null>_getAgenda() async{
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),
-                                ),    
+                                ),   
+                                  
                                Row(
                                       children: [
                                         Text('Available:'                                    
