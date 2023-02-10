@@ -169,7 +169,19 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                                           ),
                                         ),
                                       ],
-                                    ),    
+                                    ), 
+                                     SizedBox(height: 5,), 
+                                    Row(
+                                      children: <Widget>[
+                                         Text('Specialty :', style: TextStyle(fontWeight: FontWeight.bold),),
+                                        Text(
+                                          _user.specialty, 
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ],
+                                    ),       
                                      SizedBox(height: 5,), 
                                     Row(
                                       children: <Widget>[

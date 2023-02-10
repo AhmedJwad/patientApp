@@ -26,7 +26,7 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
   bool _showLoader = false;
   bool _passwordShow = false;
   bool _photoChanged = false;
-
+  bool _showSpecialty = false;
   late XFile _image;
 
    String _countryName = 'Iraq (Iq)';
@@ -77,6 +77,10 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
   bool _confirmShowError = false;
   TextEditingController _confirmController = TextEditingController();
 
+  String _specialty = '';
+  String _specialtyError = '';
+  bool _specialtyShowError = false;
+  TextEditingController _specialtyController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -101,7 +105,8 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
               _showAddress(),  
               _showCountry(),           
               _showPhoneNumber(),
-              _showRolesId(),              
+              _showRolesId(),  
+              _showSpecialty?  _showspecialty():Container(),            
               _showPassword(),
               _showConfirm(),          
               _showButtons(),
@@ -278,6 +283,12 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
                 onChanged: (option) {
                   setState(() {
                     _roleId = option as int;
+                     if ( _roleId == 1) {
+                      _showSpecialty = true;
+                    } else {
+                      _showSpecialty = false;
+                      _specialty = "General";
+                    }
                   });
                 },
                 decoration: InputDecoration(
@@ -302,7 +313,9 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
       list.add(DropdownMenuItem(
         child: Text(documnentType.Name),
         value: documnentType.id,
+        
       ));
+      
     });
     return list;
   }
@@ -538,6 +551,13 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
     } else {
       _confirmShowError = false;
     }
+     if (_specialty.isEmpty) {
+      isValid = false;
+      _specialtyShowError = true;
+     _specialtyError = 'You must enter a phone.';
+    } else {
+      _specialtyShowError = false;
+    }
 
     setState(() {});
     return isValid;
@@ -579,6 +599,7 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
       'phoneNumber': _phoneNumber,
       'image': base64image,
       'password': _password,
+      'specialty':_specialty,
     };
 
     Response response = await Apihelper.PostnoToken(
@@ -643,6 +664,28 @@ class _registerUserScreenState extends State<RegisterUserScreen> {
       });
      })
      );
+ }
+ 
+ Widget _showspecialty() {
+  return Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: TextField(
+                                    controller: _specialtyController,
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      hintText: 'enter Specialty...',
+                                      labelText: 'Specialty',
+                                      errorText: _specialtyShowError ?_specialtyError : null,
+                                      suffixIcon: Icon(Icons.document_scanner),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+                                    ),
+                                    onChanged: (value) {
+                                     _specialty = value;
+                                    },
+                                  ),
+              );
  }
    
   

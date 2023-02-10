@@ -60,6 +60,11 @@ class _userScreen extends State<UserScreen> {
   String _phoneNumberError = '';
   bool _phoneNumberShowError = false;
   TextEditingController _phoneNumberController = TextEditingController();
+
+  String _specialty = '';
+  String _specialtyError = '';
+  bool _specialtyShowError = false;
+  TextEditingController _specialtyController = TextEditingController();
   
 
   @override
@@ -80,6 +85,9 @@ class _userScreen extends State<UserScreen> {
 
    _phoneNumber=widget.user.phoneNumber;
    _phoneNumberController.text=_phoneNumber;   
+
+   _specialty=widget.user.specialty;
+   _specialtyController.text=_specialty;
 
   }
   Widget build(BuildContext context) {
@@ -102,7 +110,8 @@ class _userScreen extends State<UserScreen> {
               _showEmail(),
               _showAddress(),
              _showCountry(),
-              _showPhoneNumber(),          
+              _showPhoneNumber(),
+              _showspecialty(),          
               _showButtons(),
             ],
           ),
@@ -240,6 +249,13 @@ void  _save() {
     } else {
       _phoneNumberShowError = false;
     }
+      if (_specialty.isEmpty) {
+      isValid = false;
+      _specialtyShowError = true;
+     _specialtyError = 'You must enter a phone.';
+    } else {
+      _specialtyShowError = false;
+    }
     setState(() { });
     return isValid;
   }
@@ -282,7 +298,8 @@ void  _save() {
        'address': _address,  
        'countryCode': _countryCode, 
        'phoneNumber': _phoneNumber,  
-       'image':base64image,    
+       'image':base64image,   
+       'specialty' :_specialty,
     };
 
     Response response;
@@ -349,6 +366,7 @@ void  _save() {
       'countryCode': _countryCode,  
       'phoneNumber': _phoneNumber,   
       'image':base64image, 
+      'specialty' :_specialty,
     };
 
     Response response = await Apihelper.Put(
@@ -559,25 +577,25 @@ void  _save() {
            }
            
            Widget  _showAddress() {
-            return Container(
-                            padding: EdgeInsets.all(10),
-                            child: TextField(
-                              controller: _addressController,
-                              keyboardType: TextInputType.streetAddress,
-                              decoration: InputDecoration(
-                                hintText: 'enter address...',
-                                labelText: 'Address',
-                                errorText: _addressShowError ? _addressError : null,
-                                suffixIcon: Icon(Icons.home),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                                ),
-                              ),
-                              onChanged: (value) {
-                                _address = value;
-                              },
-                            ),
-        );
+                  return Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: TextField(
+                                    controller: _addressController,
+                                    keyboardType: TextInputType.streetAddress,
+                                    decoration: InputDecoration(
+                                      hintText: 'enter address...',
+                                      labelText: 'Address',
+                                      errorText: _addressShowError ? _addressError : null,
+                                      suffixIcon: Icon(Icons.home),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+                                    ),
+                                    onChanged: (value) {
+                                      _address = value;
+                                    },
+                                  ),
+              );
            }
            
          
@@ -726,5 +744,27 @@ void  _save() {
               });
           },
         );
-       }  
+       }
+       
+        Widget _showspecialty() {
+                return Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: TextField(
+                                    controller: _specialtyController,
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      hintText: 'enter Specialty...',
+                                      labelText: 'Specialty',
+                                      errorText: _specialtyShowError ?_specialtyError : null,
+                                      suffixIcon: Icon(Icons.document_scanner),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+                                    ),
+                                    onChanged: (value) {
+                                     _specialty = value;
+                                    },
+                                  ),
+              );
+        }  
   }

@@ -289,6 +289,7 @@ class  _usersSCeen extends State<UsersSCeen> {
           email: '',
           phoneNumber: '',
           countryCode: '964',
+          specialty: ''
          ),
         )
       )

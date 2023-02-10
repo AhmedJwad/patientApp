@@ -16,7 +16,7 @@ class User {
   String email='';  
   String phoneNumber='';
   String countryCode='';
-  
+  String specialty="";
   
 
   User(
@@ -35,6 +35,7 @@ class User {
       required this.email,      
       required this.phoneNumber,
       required this.countryCode,
+      required this.specialty,
       });
       
 
@@ -58,7 +59,8 @@ class User {
     userName = json['userName'];    
     email = json['email'];    
     phoneNumber = json['phoneNumber']; 
-    countryCode = json['countryCode'];    
+    countryCode = json['countryCode'];  
+    specialty=json['specialty']  ;
   }
 
   Map<String, dynamic> toJson() {
@@ -77,7 +79,8 @@ class User {
     data['userName'] = this.userName;    
     data['email'] = this.email;    
     data['phoneNumber'] = this.phoneNumber;  
-    data['countryCode'] = this.countryCode;  
+    data['countryCode'] = this.countryCode; 
+    data['specialty'] =this.specialty;
     return data;
   }
 }
