@@ -46,7 +46,7 @@ class _MyMedicalScreenState extends State<MyMedicalScreen> {
   
   Future<Null> _getUser() async{
      setState(() {
-          _showLoader=true;
+                _showLoader=true;
         });
         var connectivityResult = await Connectivity().checkConnectivity();
                             if (connectivityResult == ConnectivityResult.none) {
