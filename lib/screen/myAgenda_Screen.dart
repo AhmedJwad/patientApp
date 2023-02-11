@@ -364,6 +364,23 @@ Future<Null>_getAgenda() async{
                                                         
                                       ],
                                     ),
+                                      SizedBox(height: 5,), 
+                                   Row(
+                                      children: [
+                                        Text('Patient:'                                    
+                                        ),
+                                        SizedBox(width: 5,),
+                                        Text(
+                                          e.patientresponse != null
+                                            ? '${e.patientresponse!.firstName} ${e.patientresponse!.lastName}'
+                                            : 'No scheduled appointment',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                            ),
+                                          ),                               
+                                                        
+                                      ],
+                                    ),
                                                                 
                               ],
                             ),

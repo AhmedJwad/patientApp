@@ -8,7 +8,7 @@ class Patientresponse {
   int epcnNumber=0;
   String mobilePhone='';
   String description='';
-  String email='';
+  
 
   Patientresponse(
       {required this.id,
@@ -20,7 +20,7 @@ class Patientresponse {
        required this.epcnNumber,
        required this.mobilePhone,
        required this.description,
-      required this .email});
+      });
 
   Patientresponse.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -32,7 +32,7 @@ class Patientresponse {
     epcnNumber = json['epcnNumber'];
     mobilePhone = json['mobilePhone'];
     description = json['description'];
-    email=json['email'];
+   
   }
 
   Map<String, dynamic> toJson() {
@@ -46,7 +46,7 @@ class Patientresponse {
     data['epcnNumber'] = this.epcnNumber;
     data['mobilePhone'] = this.mobilePhone;
     data['description'] = this.description;
-    data['email'] = this.email;    
+   
     return data;
   }
 }

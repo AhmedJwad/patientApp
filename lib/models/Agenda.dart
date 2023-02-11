@@ -19,7 +19,7 @@ class Agenda {
   epcnNumber: 0, 
   mobilePhone: '', 
   description: '', 
-  email: '',   
+   
 );
   UserResponse userResponse= UserResponse(firstName: '', lastName: '', address: '', imageId: '',
    imageFullPath: '',  fullName: '', id: '', email: '', phoneNumber:'', 
